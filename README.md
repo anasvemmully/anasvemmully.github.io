@@ -55,19 +55,21 @@ Here are some ideas to get you started:
 
 ### Hosted Projects
 
--  1. (CertME)[http://cert-me.herokuapp.com/]
+-  1. [CertME](http://cert-me.herokuapp.com/)
+
+![github dev](https://user-images.githubusercontent.com/856858/130119109-4769f2d7-9027-4bc4-a38c-10f297499e8f.gif)
+
 
 ### Connect with me:
 
-[<img align="left" alt="salman | Instagram" width="28px" src="https://img.icons8.com/fluency/48/000000/instagram-new.png" />][instagram]
+<!-- [<img align="left" alt="salman | Instagram" width="28px" src="https://img.icons8.com/fluency/48/000000/instagram-new.png" />][instagram] -->
 [<img style="filter: invert()" align="left" alt="ilyas | Twitter" width="28px" src="https://img.icons8.com/color/48/000000/twitter.png"/>][twitter]
 [<img align="left" alt="salman | LinkedIn" width="28px" src="https://img.icons8.com/color/48/000000/linkedin.png" />][linkedin]
 [<img align="left" alt="salman | Discord" width="28px" src="https://img.icons8.com/color/48/000000/discord-logo.png" />][discord]
 
-[twitter]:https://twitter.com/salmn47214466
-[linkedin]:https://www.linkedin.com/in/salman-pp-340598238/
-[instagram]:https://www.instagram.com/_sa_lmn__/
-[discord]:https://discordapp.com/users/758727425365901364
+[twitter]:https://twitter.com/Muhammedanasv10
+[linkedin]:https://www.linkedin.com/in/muhammed-anas-v-536a7b201/
+[discord]:https://discordapp.com/users/743477292553994381
 
 
 
