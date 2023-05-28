@@ -1,17 +1,26 @@
-### Hi there, I'm Muhammed Anas <img src="https://media.giphy.com/media/hvRJCLFzcasrR4ia7z/giphy.gif" height="25px" width="25px"> 
-Student at CUSAT, trying to see in a new dimension. Visit my portfolio [here](https://anasvemmully.github.io/anasvemmully/).
-   
+<h1 align="center">Hi there, I'm Muhammed Anas <img src="https://media.giphy.com/media/hvRJCLFzcasrR4ia7z/giphy.gif" height="25px" width="25px"> </h1>
+ <p align="center">
+<img src="https://img.shields.io/badge/Age-22-blue" />
+  <img src="https://img.shields.io/badge/Focus-Coding-brightgreen" />
+ <img src="https://img.shields.io/badge/Loves-Eating-success" />
+  <img src="https://img.shields.io/badge/Lives-Kerala-success" />
+</p>
 
-"***Knowing yourself is the beginning of all wisdom.***" - Aristotle.
+Student at CUSAT, trying to see in a new dimension. Visit my portfolio 🌐 [here](https://anasvemmully.github.io/anasvemmully/). 
 
-<!-- ### Hosted Projects
+> "***Knowing yourself is the beginning of all wisdom.***" - Aristotle.  
 
--  1. [CertME](http://cert-me.herokuapp.com/)
+### 💪 **Streak Stats** 
+<p align="center">
+   <img src="https://github-readme-stats.vercel.app/api?username=anasvemmully&show_icons=true&locale=en&theme=gruvbox" alt="ovi" height="200px" />
+   <img src="https://github-readme-stats.vercel.app/api/top-langs?username=anasvemmully&show_icons=true&locale=en&layout=compact&theme=gruvbox" alt="ovi" height="200px"/>
+</p>
 
-![github dev](https://user-images.githubusercontent.com/856858/130119109-4769f2d7-9027-4bc4-a38c-10f297499e8f.gif)
- -->
+### 🏆 **Achievements**
 
-### Connect with me:
+<img src="https://github-profile-trophy.vercel.app/?username=anasvemmully&theme=gruvbox" />
+
+### 🔗 **Connect with me**
 
 [<img style="filter: invert()" align="left" alt="ilyas | Twitter" width="28px" src="https://img.icons8.com/color/48/000000/twitter.png"/>][twitter]
 [<img align="left" alt="Anas | LinkedIn" width="28px" src="https://img.icons8.com/color/48/000000/linkedin.png" />][linkedin]
