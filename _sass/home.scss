@@ -1,0 +1,35 @@
+.home-container {
+    
+    
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 2rem 0 2rem 0;
+    margin: 0 $marginH 0 $marginH;
+    font-weight: bolder;
+    
+    // margin-top: 4rem;
+
+    .home-content {
+
+        color: white;
+        font-size: 3.8rem;
+        display: flex;
+        gap: 1rem;
+        flex-direction: column;
+
+    }
+    .home-me {
+
+        align-self: center;
+
+        img {
+
+            z-index: 100;
+            width: 450px;
+            border-radius: 28% 72% 63% 37% / 32% 30% 70% 68%           
+
+        }
+
+    }
+}

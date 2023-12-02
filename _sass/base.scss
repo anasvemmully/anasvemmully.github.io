@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Bricolage+Grotesque:opsz,wght@12..96,200;12..96,300;12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Homemade+Apple&family=Linefont:wght@100;200&family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Poppins:wght@300;400;500&family=Roboto+Slab:wght@400;500;600&display=swap');
+
+$Color1: #040D12;
+$Color2: #183D3D;
+$Color3: #5C8374;
+$Color4: #93B1A6;
+
+
+$fontMedium: 2rem;
+
+$BricolageGrotesque: 'Bricolage Grotesque', sans-serif;
+$Poppins: 'Poppins', sans-serif;
+$OpenSans: 'Open Sans', sans-serif;
+$Bangers: 'Bangers';
+$RobotoSlab: "Roboto Slab";
+$HomemadeApple:"Homemade Apple";
+$Linefont: "Linefont";
+
+$white: white;
+
+$IconSize: 30px;
+$marginH: 6rem;
+
+$color1: hsl(158, 82%, 57%);
+$color2: hsl(252, 82%, 57%);
+
+*, *::after, *::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: $BricolageGrotesque;
+
+}
+
+:root {
+    --size: 1800px;
+    --speed: 2s;
+    --easing: cubic-bezier(0.8, 0.2, 0.2, 0.8);
+}
+
+body {
+    background-color: $Color1;
+    // backg/round-color: #222;
+    overflow-x: hidden;
+
+
+}
+
+.gradient {
+    position: absolute;
+    right: 50%;
+    // top: 10%;
+    transform: translate(50%, 50%) rotate(0deg);
+    background-image: linear-gradient($color1, $color2);
+    width: var(--size);
+    height: var(--size) ;
+    filter: blur(calc(var(--size) / 5));
+    opacity: 0.8;
+    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+    // animation: rotate var(--speed) var(--easing) alternate infinite;
+}
+
+@keyframes rotate {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
