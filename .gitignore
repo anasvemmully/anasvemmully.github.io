@@ -1,0 +1,10 @@
+# Jekyll
+_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
+Gemfile.lock
+
+# Ignore the development dependencies of Jekyll
+/vendor/
+Gemfile

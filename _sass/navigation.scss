@@ -1,0 +1,58 @@
+.navbar-container {
+
+    padding: 2rem 0 2rem 0;
+    display: flex;
+    // width: 100%;
+
+    // margin: 0 $marginH 0 $marginH;
+    justify-content: flex-end;
+    
+    .navbar-item {
+        color: $white;
+        position: relative;
+        font-size: $fontMedium;
+        padding: 1rem;
+        font-weight: 400;
+        cursor: pointer;
+
+        
+        &::before {
+            content: "";
+            width: calc($IconSize + 1rem);
+            height: calc($IconSize + 1rem);
+            position: absolute;
+            transform: translate(-17%, -10%);
+        } 
+        
+        &:hover::before {
+            z-index: -1;
+            border-bottom: 1px solid white;
+        }
+
+        &:hover  {
+            font-weight: bold;
+            scale: 1.1;
+        }
+
+        &.active::before {
+            z-index: -1;
+            border-bottom: 2px solid white;
+
+        }
+
+        &.active {
+            scale: 1.1; 
+        }
+
+        &.active:hover {
+            font-weight: bold;
+        }
+
+        .icons {
+            color: white;
+            width: $IconSize;
+            height: $IconSize;
+        }
+
+    }
+}

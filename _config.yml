@@ -1,0 +1,22 @@
+title: Portfolio
+email: anasvemmully@gmail.com
+status: 💼 Open for work
+baseurl: "https://anasvemmully.github.io" # the subpath of your site, e.g. /blog
+# baseurl: ""
+cover_base_url: /assets/images/posts/cover/ 
+url: "https://anasvemmully.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+
+plugins:
+  - jekyll-feed
+
+exclude:
+  - .sass-cache/
+  - .jekyll-cache/
+  - gemfiles/
+  - Gemfile
+  - Gemfile.lock
+  - node_modules/
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/

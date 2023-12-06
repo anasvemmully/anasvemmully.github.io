@@ -1,0 +1,92 @@
+.home-container {
+    
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    // align-items: center;
+    padding: 2rem 0 2rem 0;
+    margin: 0 $marginH 0 $marginH;
+    font-weight: bolder;
+
+    .footer-contacts {
+
+        margin-top: 2rem;
+        display: flex;
+        gap: 1.2rem;
+        align-items: center;
+
+        img {
+            width: 80px;
+        }
+
+    }
+
+    .wrap-home {
+        margin: 2rem 0 6rem 0;
+        gap: 8rem;
+        display: flex;
+        flex-direction: row;
+
+        .home-content {
+
+            font-size: 3.8rem;
+            display: flex;
+            gap: 1rem;
+            flex-direction: column;
+
+            .name {
+                color: rgb(235, 184, 90);
+            }
+
+            a {
+                color: white;
+            }
+    
+        }
+        .home-me {
+    
+            position: relative;
+            align-self: center;
+
+            .status-me {
+                cursor: pointer;
+                color: white;
+                position: absolute;
+                top: -10%;
+                background-color: white;
+                border-radius: 8px;
+                font-family: $HomemadeApple;
+                padding: 0.6rem;
+                background: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2));
+                backdrop-filter: blur(10px); /* Apply a blur effect to create the glassy effect */
+                overflow: hidden;
+                -webkit-text-stroke-color: black;
+                box-shadow: 0px 0px 5px white;
+                animation: floatAnimation 1.3s infinite alternate;
+            }
+
+            img {
+                z-index: 100;
+                width: 450px;
+                border-radius: 28% 72% 63% 37% / 32% 30% 70% 68%;           
+                box-shadow: 0px 0px 99px 1px rgba(255, 255, 255, 0.4);
+    
+            }
+    
+        }
+
+    }
+}
+
+@keyframes floatAnimation {
+    0% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-5px); 
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }

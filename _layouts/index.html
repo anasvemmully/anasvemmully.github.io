@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <title>{{ site.title }}</title>
+</head>
+
+<body>
+        
+    <div class="home-container">
+        {% include navigation.html %}   
+        <div class="wrap-home">
+            <div class="home-content">
+                <div>
+                    <span class="name">Muhammed Anas</span> 
+                    here,
+                </div>
+                <div>I am  <span id="passion">Single</span></div>
+                <div>
+                    Exploring new tech and honing skills. Love bringing ideas to life. Continuously learning and creating impact.
+                </div>
+                <!-- <div>Get my <a href="/assets/media/Muhammed Anas.pdf" target="_blank">resume</a>. </div> -->
+                <div class="footer-contacts">
+                    <a target="_blank" href="https://discordapp.com/users/743477292553994381">
+                        <img src="/assets/images/logos/socials/discord-white.svg" alt="discord" />
+                    </a>
+                    <a target="_blank" href="https://www.linkedin.com/in/muhammed-anas-536a7b201/">
+                        <img src="/assets/images/logos/socials/linkedin-white.png" alt="linkedin" />
+                    </a>
+                    <a target="_blank" href="https://X.com/Muhammedanasv10">
+                        <img src="/assets/images/logos/socials/X.png" alt="X" />
+                    </a>
+                    <a target="_blank" href="https://github.com/anasvemmully">
+                        <img src="/assets/images/logos/socials/github-white.svg" alt="github" />
+                    </a>
+                    <a target="_blank" href="mailto:anasvemmully@gmail.com?Subject=Hi,%20can%20i%20get%20you%20a%20Coffee?">
+                        <img src="/assets/images/logos/socials/telegram-colour1.png" alt="email" />
+                    </a>              
+                </div>
+            </div>
+            <div class="home-me">
+                <img src="/assets/images/me/me2.png" />
+                <a href="#resume">
+                    <div class="status-me">
+                        {{ site.status }}
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="progressing">
+        <div>
+            <img src="/assets/images/logos/thinking.gif" alt="thinking" srcset="">
+            <span>Thinking what to do...</span>
+        </div>
+    </div>
+    
+    <script src="/assets/scripts/script.js"></script>
+</body>
+
+</html>
