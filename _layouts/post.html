@@ -10,22 +10,24 @@
 
 <body>
 
-    <div class="gradient"></div>
-    {% include navigation.html %}
-
+    
     <div class="post-container">
         <div class="post-header">
+            {% include navigation.html %}
             <div class="post-meta">
-                <div class="post-author">✎ {{ page.author }}</div>
+                {% if page.author %} 
+                    <div class="post-author">✎ {{ page.author }}</div>
+                {% endif %}
                 <div>
                     <span class="post-date">{{ page.date | date_to_string }}</span> |  
                     <span class="post-time">{{ page.time }} min read</span>
                 </div>
             </div>
             <div class="post-title">{{ page.title }}</div>
-            <div class="post-hero">
-                <img src="/assets/images/cover/{{ page.cover-image }}" />
-            </div>
+        </div>
+        <div class="post-hero">
+            <div class="blur-cover" style="background-image: url('{{ site.cover_base_url }}{{ page.cover-image }}')"></div>
+            <div class="image-cover" style="background-image: url('{{ site.cover_base_url }}{{ page.cover-image }}')"></div>
         </div>
         <div class="post-content">
             {{ content }}

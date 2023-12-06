@@ -13,11 +13,7 @@
             m.fadeBuffer = false
             m.messages = [
                 "a Developer.",
-                "a Data Science Student.",
                 "Single.",
-                "an animator.",
-                "a Vedio Editor.",
-                "a Photo Editor.",
                 "a Tech Enthusiast.",
                 "a Security Noob.",
             ]

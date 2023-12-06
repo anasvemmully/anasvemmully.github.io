@@ -6,19 +6,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="/assets/css/blog-style.css">
+
+    <title>{{ site.title }}</title>
 </head>
 <body>
-    
-    <h1>Latest Posts</h1>
 
-    <ul>
-    {% for post in site.posts %}
-        <li>
-        <h2><a href="{{ post.url }}">{{ post.title }}</a></h2>
-        {{ post.excerpt }}
-        </li>
-    {% endfor %}
-    </ul>
+    <div class="blog-container">
+        {% include navigation.html %}   
+        <div class="blog-card-container">
+            <div class="blog-card-container-head">Recent Posts .</div>
+            {% assign latest_posts = site.posts | sort: 'date' | reverse | limit: 4 %}
+            <div class="blog-cards">
+                {% for post in latest_posts %}
+                <div class="blog-card">
+                    <a href="{{ post.url }}">
+                        <img src="{{ site.cover_base_url }}{{ post.cover-image }}" alt="{{ post.title }}">
+                        <div class="blog-content">
+                            <div class="blog-meta">{{ post.date | date: "%b %-d, %Y" }}</div>
+                            <div class="blog-title">{{ post.title }}</div>
+                            <div class="blog-meta">{{ post.author }}</div>
+                        </div>
+                    </a> 
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+
+        <!-- <div class="search-blogs-container">
+            <div class="search-box-container">
+                <input type="text" class="search-box" placeholder="Search blog">
+            </div>
+            <div class="search-container">
+
+            </div>
+        </div> -->
+
+        {% include footer.html %}
+
+    </div>
+
 </body>
 </html>
+
+<!-- {% for post in site.posts %}
+            <li>
+            <h2><a href="{{ post.url }}">{{ post.title }}</a></h2>
+            {{ post.excerpt }}
+            </li>
+        {% endfor %} -->

@@ -2,7 +2,9 @@
 
     padding: 2rem 0 2rem 0;
     display: flex;
-    margin: 0 $marginH 0 $marginH;
+    // width: 100%;
+
+    // margin: 0 $marginH 0 $marginH;
     justify-content: flex-end;
     
     .navbar-item {
@@ -25,12 +27,25 @@
         &:hover::before {
             z-index: -1;
             border-bottom: 1px solid white;
-            // background-color: rgb(132, 35, 216);
         }
 
         &:hover  {
             font-weight: bold;
             scale: 1.1;
+        }
+
+        &.active::before {
+            z-index: -1;
+            border-bottom: 2px solid white;
+
+        }
+
+        &.active {
+            scale: 1.1; 
+        }
+
+        &.active:hover {
+            font-weight: bold;
         }
 
         .icons {
