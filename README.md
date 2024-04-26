@@ -31,6 +31,8 @@ Student at CUSAT, trying to see in a new dimension. Visit my portfolio 🌐 [her
 [linkedin]:https://www.linkedin.com/in/muhammed-anas-v-536a7b201/
 [discord]:https://discordapp.com/users/743477292553994381
 
+![made-in-kunnamkulam](https://raw.githubusercontent.com/TheoIsDumb/charapara/master/static/kunnamkulam_optimized.svg)
+
 </br>
 </br>
 </br>
