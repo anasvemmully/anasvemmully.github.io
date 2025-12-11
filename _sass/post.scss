@@ -11,7 +11,7 @@
         grid-template-columns:
             [fulwidth-start] minmax($PaddingInline, 1fr)
             [breakout-start] minmax(0,$BreakOutSize)
-            [content-start] min(100% - ($PaddingInline * 2), $ContentMaWidth) [content-end]
+            [content-start] min(calc(100% - (#{$PaddingInline} * 2)), $ContentMaWidth) [content-end]
             minmax(0,$BreakOutSize) [breakout-start]
             minmax($PaddingInline, 1fr) [fulwidth-end];
     
