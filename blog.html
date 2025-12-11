@@ -13,38 +13,90 @@
 <body>
 
     <div class="blog-container">
-        {% include navigation.html %}   
-        <div class="blog-card-container">
-            <div class="blog-card-container-head">Recent Posts .</div>
-            {% assign latest_posts = site.posts | sort: 'date' | reverse | limit: 4 %}
-            <div class="blog-cards">
-                {% for post in latest_posts %}
-                <div class="blog-card">
-                    <a href="{{ post.url }}">
-                        <img src="{{ site.cover_base_url }}{{ post.cover-image }}" alt="{{ post.title }}">
-                        <div class="blog-content">
-                            <div class="blog-meta">{{ post.date | date: "%b %-d, %Y" }}</div>
-                            <div class="blog-title">{{ post.title }}</div>
-                            <div class="blog-meta">{{ post.author }}</div>
-                        </div>
-                    </a> 
-                </div>
-            {% endfor %}
+        {% include navigation.html %}
+
+        <div class="search-blogs-container">
+            <div class="search-box-container">
+                <input type="text" id="search-box" class="search-box" placeholder="Search posts...">
             </div>
         </div>
 
-        <!-- <div class="search-blogs-container">
-            <div class="search-box-container">
-                <input type="text" class="search-box" placeholder="Search blog">
+        <div class="blog-card-container">
+            <div class="blog-card-container-head">All Posts .</div>
+            <div class="blog-cards" id="blog-cards">
+                {% if paginator %}
+                    {% for post in paginator.posts %}
+                    <div class="blog-card" data-title="{{ post.title | downcase }}" data-author="{{ post.author | downcase }}" data-date="{{ post.date | date: '%b %-d, %Y' }}">
+                        <a href="{{ post.url }}">
+                            <img src="{{ site.cover_base_url }}{{ post.cover-image }}" alt="{{ post.title }}">
+                            <div class="blog-content">
+                                <div class="blog-meta">{{ post.date | date: "%b %-d, %Y" }}</div>
+                                <div class="blog-title">{{ post.title }}</div>
+                                <div class="blog-meta">{{ post.author }}</div>
+                            </div>
+                        </a>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    {% for post in site.posts %}
+                    <div class="blog-card" data-title="{{ post.title | downcase }}" data-author="{{ post.author | downcase }}" data-date="{{ post.date | date: '%b %-d, %Y' }}">
+                        <a href="{{ post.url }}">
+                            <img src="{{ site.cover_base_url }}{{ post.cover-image }}" alt="{{ post.title }}">
+                            <div class="blog-content">
+                                <div class="blog-meta">{{ post.date | date: "%b %-d, %Y" }}</div>
+                                <div class="blog-title">{{ post.title }}</div>
+                                <div class="blog-meta">{{ post.author }}</div>
+                            </div>
+                        </a>
+                    </div>
+                    {% endfor %}
+                {% endif %}
             </div>
-            <div class="search-container">
 
+            {% if paginator.total_pages > 1 %}
+            <div class="pagination">
+                {% if paginator.previous_page %}
+                    <a href="{{ paginator.previous_page_path | prepend: site.baseurl }}" class="pagination-btn">&laquo; Previous</a>
+                {% else %}
+                    <span class="pagination-btn disabled">&laquo; Previous</span>
+                {% endif %}
+
+                <span class="pagination-info">Page {{ paginator.page }} of {{ paginator.total_pages }}</span>
+
+                {% if paginator.next_page %}
+                    <a href="{{ paginator.next_page_path | prepend: site.baseurl }}" class="pagination-btn">Next &raquo;</a>
+                {% else %}
+                    <span class="pagination-btn disabled">Next &raquo;</span>
+                {% endif %}
             </div>
-        </div> -->
+            {% endif %}
+        </div>
 
         {% include footer.html %}
 
     </div>
+
+    <script>
+        // Search functionality
+        const searchBox = document.getElementById('search-box');
+        const blogCards = document.querySelectorAll('.blog-card');
+
+        searchBox.addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+
+            blogCards.forEach(card => {
+                const title = card.getAttribute('data-title');
+                const author = card.getAttribute('data-author');
+                const date = card.getAttribute('data-date').toLowerCase();
+
+                if (title.includes(searchTerm) || author.includes(searchTerm) || date.includes(searchTerm)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    </script>
 
 </body>
 </html>
