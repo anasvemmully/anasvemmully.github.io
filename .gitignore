@@ -10,4 +10,4 @@ Gemfile.lock
 Gemfile
 
 # macOS metadata files
-._*
+**/._*
