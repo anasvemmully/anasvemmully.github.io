@@ -4,10 +4,24 @@ status: 💼 Open for work
 baseurl: "https://anasvemmully.github.io" # the subpath of your site, e.g. /blog
 # baseurl: ""
 cover_base_url: /assets/images/posts/cover/ 
+post_images_url: /assets/images/posts/image/ 
+
 url: "https://anasvemmully.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 
 plugins:
   - jekyll-feed
+  - jekyll-paginate
+  - jekyll-sitemap
+
+# Exclude from sitemap
+defaults:
+  - scope:
+      path: "assets/media/"
+    values:
+      sitemap: false
+
+paginate: 6
+paginate_path: "/blog/page:num/"
 
 exclude:
   - .sass-cache/

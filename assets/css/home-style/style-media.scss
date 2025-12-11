@@ -1,0 +1,38 @@
+@media screen and (max-width: 768px) {
+    
+    /* Your styles for smaller screens here */
+    $marginH : 2rem;
+    $WraphomeMargin: 3rem;
+    $IconSize:  2rem;
+
+    .navbar-container {
+        justify-content: center;
+        .navbar-item {
+            .icons {
+                width: $IconSize;
+                height: $IconSize;
+            }
+        }
+    }
+
+    .home-container {
+        .wrap-home {
+            margin: $WraphomeMargin $marginH 0 $marginH;
+            .home-me {
+                display: none;
+            }
+            .home-content {
+                overflow: hidden;
+                font-size: calc($fontLarge - 2.6rem);
+                .footer-contacts {
+                    display: flex;
+                    justify-content: center;
+                    img {
+                        width: 40px;
+                    }
+                }
+            }
+        }
+    }
+
+}

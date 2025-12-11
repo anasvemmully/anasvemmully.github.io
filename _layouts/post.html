@@ -4,36 +4,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/assets/css/post-style.css">
+    <link rel="stylesheet" href="/assets/css/post-style/post-style.css">
     <title>Portfolio</title>
 </head>
 
 <body>
 
     
-    <div class="post-container">
-        <div class="post-header">
-            {% include navigation.html %}
-            <div class="post-meta">
-                {% if page.author %} 
-                    <div class="post-author">✎ {{ page.author }}</div>
-                {% endif %}
-                <div>
-                    <span class="post-date">{{ page.date | date_to_string }}</span> |  
-                    <span class="post-time">{{ page.time }} min read</span>
-                </div>
+    <div class="post-container ">
+        {% include navigation.html %}
+        <div class="post-grid-container">
+            {% if page.author %} 
+                <div class="post-author">✎ {{ page.author }}</div>
+            {% endif %}
+            <div>
+                <span class="post-date">{{ page.date | date_to_string }}</span> |  
+                <span class="post-time">{{ page.time }} min read</span>
             </div>
             <div class="post-title">{{ page.title }}</div>
-        </div>
-        <div class="post-hero">
-            <div class="blur-cover" style="background-image: url('{{ site.cover_base_url }}{{ page.cover-image }}')"></div>
-            <div class="image-cover" style="background-image: url('{{ site.cover_base_url }}{{ page.cover-image }}')"></div>
-        </div>
-        <div class="post-content">
-            {{ content }}
+            {% if page.cover-image %}
+            <div class="post-hero fullwidth">
+                <div class="blur-cover" style="background-image: url('{{ site.cover_base_url }}{{ page.cover-image }}')"></div>
+                <div class="fullwidth image-cover" style="background-image: url('{{ site.cover_base_url }}{{ page.cover-image }}')"></div>
+            </div>
+            {% endif %}
+
+            <div class="content">
+                {{ content | markdownify }}
+            </div>
         </div>
     
     </div>
+
+    <script src="/assets/scripts/image-viewer.js"></script>
 
 </body>
 

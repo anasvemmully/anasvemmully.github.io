@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/home-style/style.css">
     <title>{{ site.title }}</title>
 </head>
 
@@ -13,6 +13,14 @@
     <div class="home-container">
         {% include navigation.html %}   
         <div class="wrap-home">
+            <div class="home-me">
+                <img src="/assets/images/me/me2.png" />
+                <a href="#resume">
+                    <div class="status-me">
+                        {{ site.status }}
+                    </div>
+                </a>
+            </div>
             <div class="home-content">
                 <div>
                     <span class="name">Muhammed Anas</span> 
@@ -40,14 +48,6 @@
                         <img src="/assets/images/logos/socials/telegram-colour1.png" alt="email" />
                     </a>              
                 </div>
-            </div>
-            <div class="home-me">
-                <img src="/assets/images/me/me2.png" />
-                <a href="#resume">
-                    <div class="status-me">
-                        {{ site.status }}
-                    </div>
-                </a>
             </div>
         </div>
     </div>
