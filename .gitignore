@@ -8,3 +8,6 @@ Gemfile.lock
 # Ignore the development dependencies of Jekyll
 /vendor/
 Gemfile
+
+# macOS metadata files
+._*
