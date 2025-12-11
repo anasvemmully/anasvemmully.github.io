@@ -23,6 +23,13 @@ $white: white;
 
 $IconSize: 30px;
 $marginH: 6rem;
+$ContentmarginH: 21rem;
+$WraphomeMargin: 6rem;
+
+$PaddingInline: 2rem;
+$ContentMaWidth: 80ch;
+$BreakOutMaxWidth: 100ch;
+$BreakOutSize: calc(($BreakOutMaxWidth - $ContentMaWidth) / 2);
 
 $color1: hsl(158, 82%, 57%);
 $color2: hsl(252, 82%, 57%);
@@ -31,13 +38,12 @@ $color2: hsl(252, 82%, 57%);
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: $BricolageGrotesque;
+    font-family: $OpenSans;
 
 }
 
 body {
     background-color: $Color1;
-    // backg/round-color: #222;
     overflow-x: hidden;
 
 
@@ -49,6 +55,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    border-top: 1px solid rgba(138, 138, 138, 0.4);
 
     div {
       color: white;
@@ -79,3 +86,201 @@ body {
       transform: rotate(360deg);
     }
   }
+
+// Full-Screen Image Viewer Styles
+.image-viewer-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 9999;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+
+    &.active {
+        display: flex;
+        opacity: 1;
+    }
+}
+
+.image-viewer-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.image-viewer-content {
+    max-width: 90vw;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+
+    img {
+        max-width: 100%;
+        max-height: calc(90vh - 4rem);
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        border-radius: 8px;
+        box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+    }
+}
+
+.image-viewer-caption {
+    color: white;
+    font-size: 1rem;
+    text-align: center;
+    max-width: 600px;
+    padding: 0.5rem 1rem;
+}
+
+.image-viewer-counter {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+}
+
+.image-viewer-close,
+.image-viewer-prev,
+.image-viewer-next {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+
+    svg {
+        width: 24px;
+        height: 24px;
+    }
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.5);
+        transform: scale(1.1);
+    }
+
+    &:active {
+        transform: scale(0.95);
+    }
+}
+
+.image-viewer-close {
+    top: 2rem;
+    right: 2rem;
+}
+
+.image-viewer-prev {
+    left: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+
+    &:hover {
+        transform: translateY(-50%) scale(1.1);
+    }
+}
+
+.image-viewer-next {
+    right: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+
+    &:hover {
+        transform: translateY(-50%) scale(1.1);
+    }
+}
+
+// Base responsive styles
+@media screen and (max-width: 768px) {
+    body {
+        font-size: 14px;
+    }
+
+    .progressing {
+        padding: 0 1rem;
+    }
+
+    // Image viewer mobile styles
+    .image-viewer-container {
+        padding: 1rem;
+    }
+
+    .image-viewer-content {
+        max-width: 95vw;
+        max-height: 95vh;
+
+        img {
+            max-height: calc(95vh - 3rem);
+        }
+    }
+
+    .image-viewer-close {
+        top: 1rem;
+        right: 1rem;
+        width: 40px;
+        height: 40px;
+
+        svg {
+            width: 20px;
+            height: 20px;
+        }
+    }
+
+    .image-viewer-prev,
+    .image-viewer-next {
+        width: 40px;
+        height: 40px;
+        bottom: 2rem;
+        top: auto;
+        transform: none;
+
+        svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        &:hover {
+            transform: scale(1.1);
+        }
+    }
+
+    .image-viewer-prev {
+        left: 1rem;
+    }
+
+    .image-viewer-next {
+        right: 1rem;
+        left: auto;
+    }
+
+    .image-viewer-caption {
+        font-size: 0.9rem;
+        padding: 0.3rem 0.5rem;
+    }
+
+    .image-viewer-counter {
+        font-size: 0.8rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    body {
+        font-size: 13px;
+    }
+}
