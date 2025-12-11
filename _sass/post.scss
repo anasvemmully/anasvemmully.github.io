@@ -165,7 +165,7 @@
             grid-template-columns:
                 [fulwidth-start] minmax(2rem, 1fr)
                 [breakout-start] minmax(0, 2rem)
-                [content-start] min(100% - 4rem, $ContentMaWidth) [content-end]
+                [content-start] minmax(0, $ContentMaWidth) [content-end]
                 minmax(0, 2rem) [breakout-start]
                 minmax(2rem, 1fr) [fulwidth-end];
 
@@ -198,7 +198,7 @@
             grid-template-columns:
                 [fulwidth-start] minmax(1.5rem, 1fr)
                 [breakout-start] minmax(0, 1rem)
-                [content-start] min(100% - 3rem, 90vw) [content-end]
+                [content-start] minmax(0, $ContentMaWidth) [content-end]
                 minmax(0, 1rem) [breakout-start]
                 minmax(1.5rem, 1fr) [fulwidth-end];
 
@@ -257,7 +257,7 @@
             grid-template-columns:
                 [fulwidth-start] minmax(1rem, 1fr)
                 [breakout-start] 0
-                [content-start] min(100% - 2rem, 95vw) [content-end]
+                [content-start] minmax(0, $ContentMaWidth) [content-end]
                 0 [breakout-start]
                 minmax(1rem, 1fr) [fulwidth-end];
 
