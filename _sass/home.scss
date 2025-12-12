@@ -1,129 +1,204 @@
 .home-container {
-
     color: white;
     display: flex;
     flex-direction: column;
     padding: 0;
-    font-weight: bolder;
     height: 100vh;
     justify-content: flex-start;
     align-items: stretch;
-    margin-bottom: 0;
-    
-    .footer-contacts {
 
-        margin-top: 1.5rem;
-        display: flex;
-        gap: 1rem;
-        align-items: center;
-
-
-        img {
-            width: 60px;
-        }
-
-    }
-    
     .wrap-home {
         margin: 0;
         padding: 0 $marginH;
-        gap: 6rem;
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         align-items: center;
-        flex: 1;
         justify-content: center;
-        min-height: 0;
-        
+        flex: 1;
+        max-width: 900px;
+        text-align: center;
+        align-self: center;
+        width: 100%;
 
         .home-content {
-
-            font-size: 3.2rem;
             display: flex;
-            gap: 0.8rem;
+            gap: 2rem;
             flex-direction: column;
+            align-items: center;
+            animation: fadeInUp 0.8s ease-out;
+
+            .greeting {
+                font-size: 2rem;
+                font-weight: 500;
+                opacity: 0.9;
+                letter-spacing: -0.5px;
+            }
 
             .name {
-                color: rgb(235, 184, 90);
-                // Need to add a font
-                // font-family: $Linefont;
-                // Need to add a font
+                color: #ffd700;
+                font-weight: 700;
+                background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
             }
 
-            a {
-                color: white;
-            }
-    
-        }
-        .home-me {
-    
-            position: relative;
-            align-self: center;
+            .tagline {
+                font-size: 5rem;
+                font-weight: 800;
+                line-height: 1.1;
+                letter-spacing: -2px;
+                margin: -0.5rem 0;
 
-            .status-me {
+                .highlight {
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                    position: relative;
+                    display: inline-block;
+                    min-width: 480px;
+                    text-align: center;
+                }
+            }
+
+            .description {
+                font-size: 1.25rem;
+                font-weight: 400;
+                line-height: 1.8;
+                max-width: 700px;
+                opacity: 0.8;
+                margin: 0.5rem 0;
+            }
+
+            .status-badge {
+                display: inline-flex;
+                align-items: center;
+                padding: 0.8rem 1.5rem;
+                background: rgba(255, 255, 255, 0.1);
+                backdrop-filter: blur(10px);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                border-radius: 50px;
+                font-size: 1rem;
+                font-weight: 600;
+                margin-top: 0.5rem;
+                transition: all 0.3s ease;
                 cursor: pointer;
-                color: white;
-                position: absolute;
-                top: -10%;
-                background-color: white;
-                border-radius: 8px;
-                font-family: $HomemadeApple;
-                padding: 0.6rem;
-                background: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2));
-                backdrop-filter: blur(10px); /* Apply a blur effect to create the glassy effect */
-                overflow: hidden;
-                -webkit-text-stroke-color: black;
-                box-shadow: 0px 0px 5px white;
-                animation: floatAnimation 1.3s infinite alternate;
+
+                &:hover {
+                    background: rgba(255, 255, 255, 0.15);
+                    border-color: rgba(255, 255, 255, 0.3);
+                    transform: translateY(-2px);
+                    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+                }
+
+                &::before {
+                    content: '●';
+                    color: #4ade80;
+                    margin-right: 0.5rem;
+                    font-size: 1.2rem;
+                    animation: pulse 2s ease-in-out infinite;
+                }
             }
 
-            img {
-                z-index: 100;
-                width: 380px;
-                border-radius: 28% 72% 63% 37% / 32% 30% 70% 68%;
-                box-shadow: 0px 0px 99px 1px rgba(255, 255, 255, 0.4);
+            .footer-contacts {
+                margin-top: 1rem;
+                display: flex;
+                gap: 1rem;
+                align-items: center;
+                justify-content: center;
 
+                a {
+                    width: 50px;
+                    height: 50px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background: rgba(255, 255, 255, 0.05);
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    border-radius: 12px;
+                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    padding: 0.7rem;
+
+                    &:hover {
+                        background: rgba(255, 255, 255, 0.1);
+                        border-color: rgba(255, 255, 255, 0.3);
+                        transform: translateY(-4px) scale(1.05);
+                        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+                    }
+
+                    img {
+                        width: 28px;
+                        height: 28px;
+                        object-fit: contain;
+                        opacity: 0.9;
+                        transition: opacity 0.3s ease;
+                    }
+
+                    &:hover img {
+                        opacity: 1;
+                    }
+                }
             }
-    
         }
-
     }
 }
 
-@keyframes floatAnimation {
-    0% {
-      transform: translateY(0);
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
     }
     50% {
-      transform: translateY(-5px);
+        opacity: 0.5;
     }
-    100% {
-      transform: translateY(0);
-    }
-  }
+}
 
 // Responsive styles for home page
 @media screen and (max-width: 1024px) {
     .home-container {
         .wrap-home {
             padding: 0 4rem;
-            gap: 4rem;
+            max-width: 800px;
 
             .home-content {
-                font-size: 2.8rem;
-                gap: 0.7rem;
-            }
+                gap: 1.8rem;
 
-            .home-me {
-                img {
-                    width: 320px;
+                .greeting {
+                    font-size: 1.75rem;
                 }
-            }
-        }
 
-        .footer-contacts {
-            img {
-                width: 55px;
+                .tagline {
+                    font-size: 4rem;
+
+                    .highlight {
+                        min-width: 400px;
+                    }
+                }
+
+                .description {
+                    font-size: 1.15rem;
+                }
+
+                .footer-contacts a {
+                    width: 48px;
+                    height: 48px;
+
+                    img {
+                        width: 26px;
+                        height: 26px;
+                    }
+                }
             }
         }
     }
@@ -131,39 +206,48 @@
 
 @media screen and (max-width: 768px) {
     .home-container {
-        padding: 0;
-
         .wrap-home {
             padding: 0 2rem;
-            flex-direction: column-reverse;
-            gap: 2rem;
-            align-items: center;
 
             .home-content {
-                font-size: 2rem;
-                gap: 0.6rem;
-                text-align: center;
-                align-items: center;
+                gap: 1.5rem;
 
-                .footer-contacts {
-                    justify-content: center;
-                    flex-wrap: wrap;
-                    margin-top: 1rem;
+                .greeting {
+                    font-size: 1.5rem;
+                }
 
-                    img {
-                        width: 50px;
+                .tagline {
+                    font-size: 3rem;
+                    letter-spacing: -1.5px;
+
+                    .highlight {
+                        min-width: 300px;
                     }
                 }
-            }
 
-            .home-me {
-                img {
-                    width: 250px;
+                .description {
+                    font-size: 1rem;
+                    max-width: 100%;
                 }
 
-                .status-me {
-                    font-size: 0.85rem;
-                    padding: 0.4rem;
+                .status-badge {
+                    font-size: 0.9rem;
+                    padding: 0.7rem 1.2rem;
+                }
+
+                .footer-contacts {
+                    flex-wrap: wrap;
+                    gap: 0.8rem;
+
+                    a {
+                        width: 45px;
+                        height: 45px;
+
+                        img {
+                            width: 24px;
+                            height: 24px;
+                        }
+                    }
                 }
             }
         }
@@ -176,34 +260,51 @@
 
 @media screen and (max-width: 480px) {
     .home-container {
-        padding: 0;
-
         .wrap-home {
-            padding: 0 1rem;
-            gap: 1.5rem;
+            padding: 0 1.5rem;
 
             .home-content {
-                font-size: 1.5rem;
-                gap: 0.5rem;
+                gap: 1.2rem;
 
-                .footer-contacts {
-                    gap: 0.7rem;
-                    margin-top: 0.8rem;
+                .greeting {
+                    font-size: 1.25rem;
+                }
 
-                    img {
-                        width: 40px;
+                .tagline {
+                    font-size: 2.2rem;
+                    letter-spacing: -1px;
+
+                    .highlight {
+                        min-width: 250px;
                     }
                 }
-            }
 
-            .home-me {
-                img {
-                    width: 200px;
+                .description {
+                    font-size: 0.95rem;
+                    line-height: 1.6;
                 }
 
-                .status-me {
-                    font-size: 0.7rem;
-                    padding: 0.3rem;
+                .status-badge {
+                    font-size: 0.85rem;
+                    padding: 0.6rem 1rem;
+
+                    &::before {
+                        font-size: 1rem;
+                    }
+                }
+
+                .footer-contacts {
+                    gap: 0.6rem;
+
+                    a {
+                        width: 42px;
+                        height: 42px;
+
+                        img {
+                            width: 22px;
+                            height: 22px;
+                        }
+                    }
                 }
             }
         }
@@ -217,28 +318,45 @@
 @media screen and (max-width: 360px) {
     .home-container {
         .wrap-home {
-            gap: 1rem;
+            padding: 0 1rem;
 
             .home-content {
-                font-size: 1.3rem;
-                gap: 0.4rem;
+                gap: 1rem;
+
+                .greeting {
+                    font-size: 1.1rem;
+                }
+
+                .tagline {
+                    font-size: 1.8rem;
+                    letter-spacing: -0.5px;
+
+                    .highlight {
+                        min-width: 200px;
+                    }
+                }
+
+                .description {
+                    font-size: 0.9rem;
+                }
+
+                .status-badge {
+                    font-size: 0.8rem;
+                    padding: 0.5rem 0.9rem;
+                }
 
                 .footer-contacts {
                     gap: 0.5rem;
 
-                    img {
-                        width: 35px;
+                    a {
+                        width: 38px;
+                        height: 38px;
+
+                        img {
+                            width: 20px;
+                            height: 20px;
+                        }
                     }
-                }
-            }
-
-            .home-me {
-                img {
-                    width: 180px;
-                }
-
-                .status-me {
-                    font-size: 0.65rem;
                 }
             }
         }

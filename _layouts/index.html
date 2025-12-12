@@ -11,42 +11,37 @@
 <body>
         
     <div class="home-container">
-        {% include navigation.html %}   
+        {% include navigation.html %}
         <div class="wrap-home">
-            <div class="home-me">
-                <img src="/assets/images/me/me2.png" />
-                <a href="#resume">
-                    <div class="status-me">
-                        {{ site.status }}
-                    </div>
-                </a>
-            </div>
             <div class="home-content">
-                <div>
-                    <span class="name">Muhammed Anas</span> 
-                    here,
+                <div class="greeting">
+                    Hey, I'm <span class="name">Anas</span>
                 </div>
-                <div>I am  <span id="passion">Single</span></div>
-                <div>
-                    Exploring new tech and honing skills. Love bringing ideas to life. Continuously learning and creating impact.
+                <div class="tagline">
+                    I build <span id="passion" class="highlight">experiences</span>
                 </div>
-                <!-- <div>Get my <a href="/assets/media/Muhammed Anas.pdf" target="_blank">resume</a>. </div> -->
+                <div class="description">
+                    A developer passionate about exploring new tech and honing skills. I love bringing ideas to life and creating meaningful impact through code.
+                </div>
+                <!-- <div class="status-badge">
+                    {{ site.status }}
+                </div> -->
                 <div class="footer-contacts">
-                    <a target="_blank" href="https://discordapp.com/users/743477292553994381">
-                        <img src="/assets/images/logos/socials/discord-white.svg" alt="discord" />
-                    </a>
-                    <a target="_blank" href="https://www.linkedin.com/in/muhammed-anas-536a7b201/">
-                        <img src="/assets/images/logos/socials/linkedin-white.png" alt="linkedin" />
-                    </a>
-                    <a target="_blank" href="https://X.com/Muhammedanasv10">
-                        <img src="/assets/images/logos/socials/X.png" alt="X" />
-                    </a>
-                    <a target="_blank" href="https://github.com/anasvemmully">
+                    <a target="_blank" href="https://github.com/anasvemmully" aria-label="GitHub">
                         <img src="/assets/images/logos/socials/github-white.svg" alt="github" />
                     </a>
-                    <a target="_blank" href="mailto:anasvemmully@gmail.com?Subject=Hi,%20can%20i%20get%20you%20a%20Coffee?">
+                    <a target="_blank" href="https://www.linkedin.com/in/muhammed-anas-536a7b201/" aria-label="LinkedIn">
+                        <img src="/assets/images/logos/socials/linkedin-white.png" alt="linkedin" />
+                    </a>
+                    <a target="_blank" href="https://X.com/Muhammedanasv10" aria-label="X (Twitter)">
+                        <img src="/assets/images/logos/socials/X.png" alt="X" />
+                    </a>
+                    <a target="_blank" href="https://discordapp.com/users/743477292553994381" aria-label="Discord">
+                        <img src="/assets/images/logos/socials/discord-white.svg" alt="discord" />
+                    </a>
+                    <a target="_blank" href="mailto:anasvemmully@gmail.com?Subject=Hi,%20can%20i%20get%20you%20a%20Coffee?" aria-label="Email">
                         <img src="/assets/images/logos/socials/telegram-colour1.png" alt="email" />
-                    </a>              
+                    </a>
                 </div>
             </div>
         </div>

@@ -12,10 +12,10 @@
             m.current_length = 0
             m.fadeBuffer = false
             m.messages = [
-                "a Developer.",
-                // "Single.",
-                "a Tech Enthusiast.",
-                "a Security Noob.",
+                "experiences",
+                "digital magic",
+                "innovations",
+                "solutions",
             ]
             setTimeout(m.animateIn, 100);        
         }

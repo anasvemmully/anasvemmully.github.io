@@ -3,20 +3,101 @@
     padding: 0;
     color: white;
     min-height: 100vh;
-    
+
     .post-grid-container, .fullwidth {
 
         display: grid;
-        margin: 3rem 0 4rem 0;
+        margin: 2rem 0 4rem 0;
         grid-template-columns:
-            [fulwidth-start] minmax($PaddingInline, 1fr)
+            [fullwidth-start] minmax($PaddingInline, 1fr)
             [breakout-start] minmax(0,$BreakOutSize)
             [content-start] minmax(0, $ContentMaWidth) [content-end]
-            minmax(0,$BreakOutSize) [breakout-start]
-            minmax($PaddingInline, 1fr) [fulwidth-end];
+            minmax(0,$BreakOutSize) [breakout-end]
+            minmax($PaddingInline, 1fr) [fullwidth-end];
     
         .content {
             font-size: 1.2rem;
+            line-height: 1.8;
+
+            // Global content elements
+            p {
+                margin: 1.5rem 0;
+                color: rgba(255, 255, 255, 0.95);
+            }
+
+            h1, h2, h3, h4, h5, h6 {
+                margin: 2rem 0 1rem 0;
+                line-height: 1.3;
+                font-weight: 600;
+            }
+
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 2rem; }
+            h3 { font-size: 1.75rem; }
+            h4 { font-size: 1.5rem; }
+            h5 { font-size: 1.25rem; }
+            h6 { font-size: 1.1rem; }
+
+            ul, ol {
+                margin: 1.5rem 0;
+                padding-left: 2rem;
+
+                li {
+                    margin: 0.5rem 0;
+                }
+            }
+
+            blockquote {
+                margin: 2rem 0;
+                padding: 1rem 1.5rem;
+                border-left: 4px solid rgba(255, 255, 255, 0.3);
+                background: rgba(255, 255, 255, 0.05);
+                font-style: italic;
+            }
+
+            code {
+                padding: 0.2rem 0.4rem;
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 4px;
+                font-size: 0.9em;
+                font-family: 'Courier New', monospace;
+            }
+
+            pre {
+                margin: 2rem 0;
+                padding: 1.5rem;
+                background: rgba(255, 255, 255, 0.05);
+                border-radius: 8px;
+                overflow-x: auto;
+
+                code {
+                    padding: 0;
+                    background: none;
+                }
+            }
+
+            img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 8px;
+                margin: 2rem 0;
+            }
+
+            a {
+                color: #5C8374;
+                text-decoration: underline;
+                transition: color 0.3s ease;
+
+                &:hover {
+                    color: #93B1A6;
+                }
+            }
+
+            hr {
+                margin: 3rem 0;
+                border: none;
+                border-top: 1px solid rgba(255, 255, 255, 0.2);
+            }
 
             .custom-images-container {
                 margin: 20px 0px 20px 0px;
@@ -106,24 +187,38 @@
         }
 
         & > .fullwidth {
-            grid-column: fulwidth;
+            grid-column: fullwidth;
+        }
+
+        .post-author {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+        }
+
+        .post-date, .post-time {
+            font-size: 0.95rem;
+            opacity: 0.7;
         }
 
         .post-title {
             font-size: 4rem;
+            line-height: 1.1;
+            margin: 1.5rem 0 0 0;
+            font-weight: 700;
         }
 
         .post-hero {
 
-            box-shadow: 0 0 2px rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
             margin-bottom: 3rem;
-            margin-top: 3rem;
+            margin-top: 2rem;
             position: relative;
             overflow: hidden;
             width: 100%;
             height: 450px;
             max-height: 50vh;
-            border-radius: 8px;
+            border-radius: 12px;
 
             .image-cover {
                 position: absolute;
@@ -161,13 +256,21 @@
 @media screen and (max-width: 1024px) {
     .post-container {
         .post-grid-container, .fullwidth {
-            margin: 3rem 0 3rem 0;
+            margin: 2rem 0 3rem 0;
             grid-template-columns:
-                [fulwidth-start] minmax(2rem, 1fr)
+                [fullwidth-start] minmax(2rem, 1fr)
                 [breakout-start] minmax(0, 2rem)
                 [content-start] minmax(0, $ContentMaWidth) [content-end]
-                minmax(0, 2rem) [breakout-start]
-                minmax(2rem, 1fr) [fulwidth-end];
+                minmax(0, 2rem) [breakout-end]
+                minmax(2rem, 1fr) [fullwidth-end];
+
+            .post-author {
+                font-size: 1rem;
+            }
+
+            .post-date, .post-time {
+                font-size: 0.9rem;
+            }
 
             .post-title {
                 font-size: 3rem;
@@ -194,16 +297,23 @@
 @media screen and (max-width: 768px) {
     .post-container {
         .post-grid-container, .fullwidth {
-            margin: 3rem 0 2rem 0;
+            margin: 1.5rem 0 2rem 0;
             grid-template-columns:
-                [fulwidth-start] minmax(1.5rem, 1fr)
+                [fullwidth-start] minmax(1.5rem, 1fr)
                 [breakout-start] minmax(0, 1rem)
                 [content-start] minmax(0, $ContentMaWidth) [content-end]
-                minmax(0, 1rem) [breakout-start]
-                minmax(1.5rem, 1fr) [fulwidth-end];
+                minmax(0, 1rem) [breakout-end]
+                minmax(1.5rem, 1fr) [fullwidth-end];
 
             .content {
                 font-size: 1rem;
+
+                h1 { font-size: 2rem; }
+                h2 { font-size: 1.75rem; }
+                h3 { font-size: 1.5rem; }
+                h4 { font-size: 1.25rem; }
+                h5 { font-size: 1.1rem; }
+                h6 { font-size: 1rem; }
 
                 .custom-images-container {
                     img {
@@ -219,6 +329,14 @@
                 .slide-gallery-marquee .marquee-content img {
                     height: 150px;
                 }
+            }
+
+            .post-author {
+                font-size: 0.95rem;
+            }
+
+            .post-date, .post-time {
+                font-size: 0.85rem;
             }
 
             .post-title {
@@ -253,16 +371,23 @@
 @media screen and (max-width: 480px) {
     .post-container {
         .post-grid-container, .fullwidth {
-            margin: 3rem 0 1.5rem 0;
+            margin: 1rem 0 1.5rem 0;
             grid-template-columns:
-                [fulwidth-start] minmax(1rem, 1fr)
+                [fullwidth-start] minmax(1rem, 1fr)
                 [breakout-start] 0
                 [content-start] minmax(0, $ContentMaWidth) [content-end]
-                0 [breakout-start]
-                minmax(1rem, 1fr) [fulwidth-end];
+                0 [breakout-end]
+                minmax(1rem, 1fr) [fullwidth-end];
 
             .content {
                 font-size: 0.9rem;
+
+                h1 { font-size: 1.75rem; }
+                h2 { font-size: 1.5rem; }
+                h3 { font-size: 1.3rem; }
+                h4 { font-size: 1.15rem; }
+                h5 { font-size: 1rem; }
+                h6 { font-size: 0.95rem; }
 
                 .custom-images-container {
                     img {
@@ -278,6 +403,14 @@
                 .slide-gallery-marquee .marquee-content img {
                     height: 120px;
                 }
+            }
+
+            .post-author {
+                font-size: 0.9rem;
+            }
+
+            .post-date, .post-time {
+                font-size: 0.8rem;
             }
 
             .post-title {
@@ -313,6 +446,21 @@
 @media screen and (max-width: 360px) {
     .post-container {
         .post-grid-container, .fullwidth {
+            .content {
+                h1 { font-size: 1.5rem; }
+                h2 { font-size: 1.3rem; }
+                h3 { font-size: 1.15rem; }
+                h4 { font-size: 1rem; }
+            }
+
+            .post-author {
+                font-size: 0.85rem;
+            }
+
+            .post-date, .post-time {
+                font-size: 0.75rem;
+            }
+
             .post-title {
                 font-size: 1.5rem;
             }
