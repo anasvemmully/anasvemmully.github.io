@@ -24,6 +24,17 @@
             .home-content {
                 overflow: hidden;
                 font-size: calc($fontLarge - 2.6rem);
+
+                .tagline {
+                    font-size: 2.5rem;
+                    gap: 0.3rem;
+
+                    .highlight {
+                        font-size: 1.8rem;
+                        width: 14ch;
+                    }
+                }
+
                 .footer-contacts {
                     display: flex;
                     justify-content: center;
@@ -35,4 +46,38 @@
         }
     }
 
+}
+
+@media screen and (max-width: 480px) {
+    .home-container {
+        .wrap-home {
+            .home-content {
+                .tagline {
+                    font-size: 2rem;
+
+                    .highlight {
+                        font-size: 1.4rem;
+                        width: 13ch;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 360px) {
+    .home-container {
+        .wrap-home {
+            .home-content {
+                .tagline {
+                    font-size: 1.6rem;
+
+                    .highlight {
+                        font-size: 1.2rem;
+                        width: 12ch;
+                    }
+                }
+            }
+        }
+    }
 }
