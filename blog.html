@@ -28,11 +28,9 @@
                     {% for post in paginator.posts %}
                     <div class="blog-card" data-title="{{ post.title | downcase }}" data-author="{{ post.author | downcase }}" data-date="{{ post.date | date: '%b %-d, %Y' }}">
                         <a href="{{ post.url }}">
-                            <img src="{{ site.cover_base_url }}{{ post.cover-image }}" alt="{{ post.title }}">
                             <div class="blog-content">
-                                <div class="blog-meta">{{ post.date | date: "%b %-d, %Y" }}</div>
-                                <div class="blog-title">{{ post.title }}</div>
-                                <div class="blog-meta">{{ post.author }}</div>
+                                <span class="blog-title">{{ post.title }}</span>
+                                <span class="blog-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
                             </div>
                         </a>
                     </div>
@@ -41,11 +39,9 @@
                     {% for post in site.posts %}
                     <div class="blog-card" data-title="{{ post.title | downcase }}" data-author="{{ post.author | downcase }}" data-date="{{ post.date | date: '%b %-d, %Y' }}">
                         <a href="{{ post.url }}">
-                            <img src="{{ site.cover_base_url }}{{ post.cover-image }}" alt="{{ post.title }}">
                             <div class="blog-content">
-                                <div class="blog-meta">{{ post.date | date: "%b %-d, %Y" }}</div>
-                                <div class="blog-title">{{ post.title }}</div>
-                                <div class="blog-meta">{{ post.author }}</div>
+                                <span class="blog-title">{{ post.title }}</span>
+                                <span class="blog-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
                             </div>
                         </a>
                     </div>
