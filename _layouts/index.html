@@ -54,10 +54,14 @@
         </div>
     </div>
 
+    {% include footer.html %}
+
     <!-- Background Audio -->
-    <audio id="bgAudio" loop>
+    <audio id="bgAudio" loop preload="auto">
         <source src="/assets/media/discord-checkpoint.mp3" type="audio/mpeg">
     </audio>
+
+    {% include particle-background.html %}
 
     <script src="/assets/scripts/script.js"></script>
     <script src="/assets/scripts/audio-fade.js"></script>
