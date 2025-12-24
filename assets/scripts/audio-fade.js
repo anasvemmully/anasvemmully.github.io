@@ -1,5 +1,6 @@
 (() => {
     const audio = document.getElementById('bgAudio');
+    const progressingContainer = document.querySelector('.progressing');
     const targetVolume = 0.25; // Low volume (25%)
     const fadeDuration = 2000; // 2 seconds fade
     const fadeInterval = 50; // Update every 50ms
@@ -7,6 +8,7 @@
     let currentVolume = 0;
     let fadeInTimer = null;
     let fadeOutTimer = null;
+    let isAudioReady = false;
 
     // Set initial volume to 0
     audio.volume = 0;
@@ -16,6 +18,13 @@
         if (fadeOutTimer) {
             clearInterval(fadeOutTimer);
             fadeOutTimer = null;
+        }
+
+        // Ensure audio is playing
+        if (audio.paused) {
+            audio.play().catch((err) => {
+                console.error('Audio playback failed:', err);
+            });
         }
 
         const fadeStep = (targetVolume / fadeDuration) * fadeInterval;
@@ -52,55 +61,78 @@
         }, fadeInterval);
     }
 
-    // Start playing with fade in
-    function startAudio() {
-        audio.play()
-            .then(() => {
-                fadeIn();
-            })
-            .catch((error) => {
-                // Handle autoplay restrictions - wait for user interaction
-                console.log('Autoplay prevented. Waiting for user interaction.');
+    // Initialize audio (muted) to bypass autoplay restrictions
+    function initAudio() {
+        if (!isAudioReady) {
+            audio.play()
+                .then(() => {
+                    isAudioReady = true;
+                    audio.pause();
+                    audio.currentTime = 0;
+                })
+                .catch(() => {
+                    // Wait for user interaction
+                    const enableAudio = () => {
+                        audio.play()
+                            .then(() => {
+                                isAudioReady = true;
+                                audio.pause();
+                                audio.currentTime = 0;
+                                // Remove listeners
+                                document.removeEventListener('click', enableAudio);
+                                document.removeEventListener('touchstart', enableAudio);
+                                document.removeEventListener('keydown', enableAudio);
+                            })
+                            .catch((err) => {
+                                console.error('Audio initialization failed:', err);
+                            });
+                    };
 
-                // Try to play on first user interaction
-                const playOnInteraction = () => {
-                    audio.play()
-                        .then(() => {
-                            fadeIn();
-                            // Remove listeners after successful play
-                            document.removeEventListener('click', playOnInteraction);
-                            document.removeEventListener('touchstart', playOnInteraction);
-                            document.removeEventListener('keydown', playOnInteraction);
-                        })
-                        .catch((err) => {
-                            console.error('Audio playback failed:', err);
-                        });
-                };
-
-                document.addEventListener('click', playOnInteraction);
-                document.addEventListener('touchstart', playOnInteraction);
-                document.addEventListener('keydown', playOnInteraction);
-            });
+                    document.addEventListener('click', enableAudio);
+                    document.addEventListener('touchstart', enableAudio);
+                    document.addEventListener('keydown', enableAudio);
+                });
+        }
     }
 
-    // Start audio when page loads
+    // Intersection Observer to detect when .progressing is in view
+    const observerOptions = {
+        root: null, // viewport
+        rootMargin: '0px',
+        threshold: 0.1 // Trigger when at least 10% is visible
+    };
+
+    const observerCallback = (entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                // .progressing container is in view - fade in
+                fadeIn();
+            } else {
+                // .progressing container is out of view - fade out
+                fadeOut();
+            }
+        });
+    };
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+    // Start observing when DOM is ready
     window.addEventListener('load', () => {
-        startAudio();
+        if (progressingContainer) {
+            initAudio();
+            observer.observe(progressingContainer);
+        }
     });
 
-    // Fade out when leaving page
+    // Pause when leaving page
     window.addEventListener('beforeunload', () => {
         fadeOut();
     });
 
-    // Pause and fade out when page loses focus (optional)
+    // Pause when page loses focus
     document.addEventListener('visibilitychange', () => {
         if (document.hidden) {
             fadeOut();
-        } else if (!audio.paused) {
-            fadeIn();
-        } else {
-            startAudio();
         }
     });
 })();
