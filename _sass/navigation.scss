@@ -8,12 +8,13 @@
     justify-content: flex-end;
 
     .navbar-item {
-        color: $white;
+        color: $TerminalGreen;
         position: relative;
         font-size: $fontMedium;
         padding: 1rem;
         font-weight: 400;
         cursor: pointer;
+        transition: all 0.1s ease;
 
 
         &::before {
@@ -22,26 +23,31 @@
             height: calc($IconSize + 1rem);
             position: absolute;
             transform: translate(-17%, -10%);
+            transition: all 0.1s ease;
         }
 
         &:hover::before {
             z-index: -1;
-            border-bottom: 1px solid white;
+            border-bottom: 1px solid $TerminalGreen;
+            box-shadow: 0 2px 5px rgba(0, 255, 65, 0.5);
         }
 
         &:hover  {
             font-weight: bold;
             scale: 1.1;
+            text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
         }
 
         &.active::before {
             z-index: -1;
-            border-bottom: 2px solid white;
+            border-bottom: 2px solid $TerminalGreen;
+            box-shadow: 0 2px 8px rgba(0, 255, 65, 0.6);
 
         }
 
         &.active {
             scale: 1.1;
+            text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
         }
 
         &.active:hover {
@@ -49,9 +55,10 @@
         }
 
         .icons {
-            color: white;
+            color: $TerminalGreen;
             width: $IconSize;
             height: $IconSize;
+            filter: drop-shadow(0 0 3px rgba(0, 255, 65, 0.3));
         }
 
     }
