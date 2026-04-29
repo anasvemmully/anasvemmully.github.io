@@ -1,5 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /assets/media/
-
-Sitemap: https://anasvemmully.github.io/sitemap.xml
