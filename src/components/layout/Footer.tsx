@@ -11,7 +11,7 @@ const socialLinks = [
 const Footer = () => {
 
   return (
-    <footer className="py-12 mt-20 border-t border-border bg-white">
+    <footer className="py-12 border-t border-border bg-white">
       <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-8">
         <div className="flex flex-col items-center md:items-start gap-4">
           <h3 className="font-heading text-lg font-bold">Connect</h3>

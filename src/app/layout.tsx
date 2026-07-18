@@ -84,7 +84,7 @@ export default function RootLayout({
       */}
       <body className="min-h-full flex flex-col bg-bg text-text selection:bg-accent/20">
         <Navigation />
-        <main className="flex-grow">{children}</main>
+        <main className="flex-grow flex flex-col">{children}</main>
         <Footer />
         <Script 
           src="https://static.cloudflareinsights.com/beacon.min.js"
