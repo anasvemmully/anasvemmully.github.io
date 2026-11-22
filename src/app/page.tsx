@@ -188,10 +188,39 @@ export default function Home() {
     <div className="flex flex-1 flex-col">
       <section className="flex flex-1 items-center">
         <div className="mx-auto grid min-h-[70vh] w-full max-w-6xl items-center gap-10 px-6 py-12 md:grid-cols-2 md:gap-8 animate-in fade-in slide-in-from-bottom-8 duration-700">
-          <h1 className="order-2 text-center text-5xl font-heading font-black leading-[1.05] tracking-tighter text-text md:order-1 md:text-left md:text-6xl lg:text-[5.5rem]">
-            <span className="block text-balance">I&apos;m Anas.</span>
-            <span className="block text-balance">Curious first, developer second.</span>
-          </h1>
+          <div className="order-2 md:order-1">
+            <h1 className="text-center text-5xl font-heading font-black leading-[1.05] tracking-tighter text-text md:text-left md:text-6xl lg:text-[5.5rem]">
+              <span className="block text-balance">I&apos;m Anas.</span>
+              <span className="block text-balance">Curious first, developer second.</span>
+            </h1>
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 font-mono text-sm text-text-secondary md:justify-start">
+              <button
+                onClick={toggleCamera}
+                className="cursor-pointer underline decoration-dotted underline-offset-4 transition-colors hover:text-text"
+              >
+                {cameraOn ? "Stop" : "Wanna try something?"}
+              </button>
+              {cameraOn && <span aria-hidden>•</span>}
+              {cameraOn && (
+                <button
+                  onClick={() => setDebugOpen((v) => !v)}
+                  className="cursor-pointer underline decoration-dotted underline-offset-4 transition-colors hover:text-text"
+                >
+                  {debugOpen ? "Hide debug" : "Debug!"}
+                </button>
+              )}
+              {cameraOn && <span aria-hidden>•</span>}
+              {cameraOn && (
+                <span>{camReady ? "Raise your hand now" : "Starting camera…"}</span>
+              )}
+              {!cameraOn && camDenied && (
+                <span>
+                  Camera was blocked — allow camera access in your browser, then
+                  click again
+                </span>
+              )}
+            </div>
+          </div>
 
           {/* Crumbling paper reel — timeline driven by hand closeness */}
           <div className="relative order-1 flex justify-center md:order-2 md:justify-end">
@@ -220,35 +249,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      {/* Camera controls, aligned with the page container's left edge */}
-      <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center gap-x-2 gap-y-1 px-6 pb-4 font-mono text-xs text-text-secondary">
-        <button
-          onClick={toggleCamera}
-          className="cursor-pointer underline decoration-dotted underline-offset-4 transition-colors hover:text-text"
-        >
-          {cameraOn ? "Stop" : "Wanna try something?"}
-        </button>
-        {cameraOn && <span aria-hidden>•</span>}
-        {cameraOn && (
-          <button
-            onClick={() => setDebugOpen((v) => !v)}
-            className="cursor-pointer underline decoration-dotted underline-offset-4 transition-colors hover:text-text"
-          >
-            {debugOpen ? "Hide debug" : "Debug!"}
-          </button>
-        )}
-        {cameraOn && <span aria-hidden>•</span>}
-        {cameraOn && (
-          <span>{camReady ? "Raise your hand now" : "Starting camera…"}</span>
-        )}
-        {!cameraOn && camDenied && (
-          <span>
-            Camera was blocked — allow camera access in your browser, then
-            click again
-          </span>
-        )}
-      </div>
 
       {/* Floating webcam window with hand-tracking skeleton */}
       {cameraOn && (
