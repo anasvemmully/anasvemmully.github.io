@@ -21,17 +21,8 @@ const link =
   "text-sm font-semibold text-text underline decoration-transparent decoration-2 underline-offset-4 transition-colors hover:decoration-accent";
 
 const Footer = () => (
-  <footer className="border-t border-border bg-bg">
-    <div className="mx-auto grid max-w-6xl gap-10 px-6 py-12 sm:grid-cols-2 md:grid-cols-[1.6fr_1fr_1fr_1fr]">
-      <div className="max-w-xs">
-        <Link href="/" className="font-heading text-2xl font-black tracking-tighter text-text">
-          ANAS
-        </Link>
-        <p className="mt-3 text-sm leading-relaxed text-text-secondary">
-          A developer passionate about exploring new tech and honing skills.
-        </p>
-      </div>
-
+  <footer className="overflow-hidden border-t border-border bg-bg">
+    <div className="mx-auto grid max-w-6xl gap-10 px-6 pt-12 pb-8 grid-cols-2 md:grid-cols-3">
       <nav aria-label="Explore">
         <h3 className={heading}>Explore</h3>
         <ul className="space-y-3">
@@ -73,10 +64,16 @@ const Footer = () => (
       </div>
     </div>
 
-    <div className="border-t border-border/20">
-      <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-6 py-5 text-xs font-bold uppercase tracking-widest text-text-secondary sm:flex-row">
-        <span>&copy; {new Date().getFullYear()} Anas</span>
-        <span>Made with ❤︎</span>
+    <div className="mx-auto max-w-6xl px-6 pb-6 text-xs font-bold uppercase tracking-widest text-text-secondary">
+      &copy; {new Date().getFullYear()} Anas &middot; Made with ❤︎
+    </div>
+
+    {/* Decorative wordmark: bottom-right, cropped so ~4/5 of the lettering shows */}
+    <div className="mx-auto flex max-w-6xl justify-end px-6" aria-hidden="true">
+      <div className="h-[0.56em] select-none overflow-hidden text-[clamp(4rem,14vw,14rem)]">
+        <span className="block font-heading font-black uppercase leading-[0.75] tracking-tighter text-accent">
+          ANANAAS
+        </span>
       </div>
     </div>
   </footer>
