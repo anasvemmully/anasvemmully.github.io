@@ -64,14 +64,10 @@ const Footer = () => (
       </div>
     </div>
 
-    <div className="mx-auto max-w-6xl px-6 pb-6 text-xs font-bold uppercase tracking-widest text-text-secondary">
-      &copy; {new Date().getFullYear()} Anas &middot; Made with ❤︎
-    </div>
-
     {/* Decorative wordmark: bottom-right, cropped so ~4/5 of the lettering shows */}
     <div className="mx-auto flex max-w-6xl justify-end px-6" aria-hidden="true">
-      <div className="h-[0.56em] select-none overflow-hidden text-[clamp(4rem,14vw,14rem)]">
-        <span className="block font-heading font-black uppercase leading-[0.75] tracking-tighter text-accent">
+      <div className="h-[0.56em] select-none overflow-hidden text-[clamp(3.5rem,11.5vw,11.5rem)]">
+        <span className="block font-heading font-black uppercase leading-[0.75] tracking-tighter text-text/15">
           ANANAAS
         </span>
       </div>
