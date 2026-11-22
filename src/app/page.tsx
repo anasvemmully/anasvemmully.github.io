@@ -189,8 +189,8 @@ export default function Home() {
       <section className="flex flex-1 items-center">
         <div className="mx-auto grid min-h-[70vh] w-full max-w-6xl items-center gap-10 px-6 py-12 md:grid-cols-2 md:gap-8 animate-in fade-in slide-in-from-bottom-8 duration-700">
           <h1 className="order-2 text-center text-5xl font-heading font-black leading-[1.05] tracking-tighter text-text md:order-1 md:text-left md:text-6xl lg:text-[5.5rem]">
-            <span className="block text-balance">Hello, my name&apos;s Anas.</span>
-            <span className="block text-balance">I&apos;m always learning.</span>
+            <span className="block text-balance">I&apos;m Anas.</span>
+            <span className="block text-balance">Curious first, developer second.</span>
           </h1>
 
           {/* Crumbling paper reel — timeline driven by hand closeness */}
