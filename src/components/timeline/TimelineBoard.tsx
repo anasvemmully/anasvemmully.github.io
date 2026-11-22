@@ -5,11 +5,9 @@ import { occurrences } from "@/lib/timeline/occurrences";
 import { findOverlaps } from "@/lib/timeline/overlaps";
 import { addDays, addMonths, formatDay, formatDateTime, formatMonth, nowMinutes, startOfDay, startOfMonth, startOfWeek, zoneLabel, type Zone } from "@/lib/timeline/time";
 import type { Timeline } from "@/lib/timeline/types";
-import MonthCalendar from "./MonthCalendar";
 import Swimlane from "./Swimlane";
 
 type Zoom = "day" | "week" | "month";
-type View = "swimlane" | "calendar";
 
 export type BoardProps = {
   timeline: Timeline;
@@ -34,15 +32,10 @@ const btn = (active: boolean) =>
   `border-2 border-text px-3 py-1 text-xs font-bold uppercase tracking-widest ${active ? "bg-accent shadow-[2px_2px_0_var(--color-primary-black)]" : "bg-surface hover:bg-secondary-gray"}`;
 
 export default function TimelineBoard({ timeline, zone, onZoneChange, onSelect }: BoardProps) {
-  const [view, setView] = useState<View>("swimlane");
   const [zoom, setZoom] = useState<Zoom>("week");
   const [anchor, setAnchor] = useState(() => initialAnchor(timeline, zone));
 
   const { start, end } = useMemo(() => {
-    if (view === "calendar") {
-      const s = startOfMonth(anchor, zone);
-      return { start: s, end: addMonths(s, 1, zone) };
-    }
     if (zoom === "day") return { start: anchor, end: addDays(anchor, 1, zone) };
     if (zoom === "week") {
       const s = startOfWeek(anchor, zone);
@@ -50,30 +43,24 @@ export default function TimelineBoard({ timeline, zone, onZoneChange, onSelect }
     }
     const s = startOfMonth(anchor, zone);
     return { start: s, end: addMonths(s, 1, zone) };
-  }, [view, zoom, anchor, zone]);
+  }, [zoom, anchor, zone]);
 
   const step = (dir: 1 | -1) => {
-    if (view === "calendar" || zoom === "month") setAnchor(addMonths(anchor, dir, zone));
+    if (zoom === "month") setAnchor(addMonths(anchor, dir, zone));
     else setAnchor(addDays(anchor, dir * (zoom === "week" ? 7 : 1), zone));
   };
 
   const overlaps = useMemo(() => findOverlaps(occurrences(timeline, { start, end })), [timeline, start, end]);
-  const title = view === "calendar" || zoom === "month" ? formatMonth(start, zone) : zoom === "day" ? formatDay(start, zone, { weekday: "long", day: "numeric", month: "long" }) : `${formatDay(start, zone)} – ${formatDay(end - 1, zone)}`;
+  const title = zoom === "month" ? formatMonth(start, zone) : zoom === "day" ? formatDay(start, zone, { weekday: "long", day: "numeric", month: "long" }) : `${formatDay(start, zone)} – ${formatDay(end - 1, zone)}`;
 
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center gap-2">
-        <div className="flex gap-1" role="group" aria-label="View">
-          <button className={btn(view === "swimlane")} onClick={() => setView("swimlane")}>Swimlane</button>
-          <button className={btn(view === "calendar")} onClick={() => setView("calendar")}>Calendar</button>
+        <div className="flex gap-1" role="group" aria-label="Zoom">
+          {(["day", "week", "month"] as const).map((z) => (
+            <button key={z} className={btn(zoom === z)} onClick={() => setZoom(z)}>{z}</button>
+          ))}
         </div>
-        {view === "swimlane" && (
-          <div className="flex gap-1" role="group" aria-label="Zoom">
-            {(["day", "week", "month"] as const).map((z) => (
-              <button key={z} className={btn(zoom === z)} onClick={() => setZoom(z)}>{z}</button>
-            ))}
-          </div>
-        )}
         <div className="flex gap-1">
           <button className={btn(false)} onClick={() => step(-1)} aria-label="Previous">←</button>
           <button className={btn(false)} onClick={() => setAnchor(startOfDay(nowMinutes(), zone))}>Today</button>
@@ -89,11 +76,7 @@ export default function TimelineBoard({ timeline, zone, onZoneChange, onSelect }
         </button>
       </div>
 
-      {view === "swimlane" ? (
-        <Swimlane timeline={timeline} start={start} end={end} zoom={zoom} zone={zone} onSelect={onSelect} />
-      ) : (
-        <MonthCalendar timeline={timeline} month={start} zone={zone} onSelect={onSelect} />
-      )}
+      <Swimlane timeline={timeline} start={start} end={end} zoom={zoom} zone={zone} onSelect={onSelect} />
 
       {overlaps.length > 0 && (
         <section className="border-2 border-text bg-surface p-3">
