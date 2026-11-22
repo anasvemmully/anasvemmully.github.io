@@ -16,16 +16,16 @@ const exploreLinks = [
 
 const toolLinks = [{ href: "/timeline", label: "Window timeline" }];
 
-const heading = "mb-4 font-heading text-xs font-bold uppercase tracking-[0.2em] text-text-secondary";
+const heading = "mb-4 font-heading text-sm font-bold uppercase tracking-[0.2em] text-text-secondary";
 const link =
-  "text-sm font-semibold text-text underline decoration-transparent decoration-2 underline-offset-4 transition-colors hover:decoration-accent";
+  "text-base font-semibold text-text underline decoration-transparent decoration-2 underline-offset-4 transition-colors hover:decoration-accent";
 
 const Footer = () => (
   <footer className="flex flex-col overflow-hidden border-t border-border bg-bg lg:min-h-[60dvh]">
-    <div className="mx-auto flex max-w-6xl flex-wrap justify-start gap-x-16 gap-y-10 px-6 pt-12 pb-8">
+    <div className="flex w-full flex-wrap justify-start gap-x-20 gap-y-10 px-6 pt-14 pb-8 md:px-12">
       <nav aria-label="Explore">
         <h3 className={heading}>Explore</h3>
-        <ul className="space-y-3">
+        <ul className="space-y-4">
           {exploreLinks.map((l) => (
             <li key={l.href}>
               <Link href={l.href} className={link}>{l.label}</Link>
@@ -36,7 +36,7 @@ const Footer = () => (
 
       <nav aria-label="Tools">
         <h3 className={heading}>Tools</h3>
-        <ul className="space-y-3">
+        <ul className="space-y-4">
           {toolLinks.map((l) => (
             <li key={l.href}>
               <Link href={l.href} className={link}>{l.label}</Link>
@@ -57,7 +57,7 @@ const Footer = () => (
               aria-label={label}
               className="border-2 border-text bg-bg-alt p-2 text-text shadow-[2px_2px_0_var(--color-primary-black)] transition-all hover:translate-x-[1px] hover:translate-y-[1px] hover:bg-accent hover:text-black hover:shadow-[1px_1px_0_var(--color-primary-black)]"
             >
-              <Icon size={18} />
+              <Icon size={22} />
             </Link>
           ))}
         </div>
@@ -65,7 +65,7 @@ const Footer = () => (
     </div>
 
     {/* Decorative wordmark: bottom-right, cropped so ~4/5 of the lettering shows */}
-    <div className="mx-auto mt-auto flex w-full max-w-6xl justify-end px-6" aria-hidden="true">
+    <div className="mt-auto flex w-full justify-end px-6 md:px-12" aria-hidden="true">
       <div className="h-[0.64em] select-none overflow-hidden text-[clamp(3.5rem,11.5vw,11.5rem)]">
         <span className="block font-heading font-black uppercase leading-[0.75] tracking-tighter text-text/10">
           ANANAAS
