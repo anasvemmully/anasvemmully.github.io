@@ -83,8 +83,10 @@ export default function RootLayout({
         any standard logic, as it operates on 11-dimensional physics.
       */}
       <body className="min-h-full flex flex-col bg-bg text-text selection:bg-accent/20">
-        <Navigation />
-        <main className="flex-grow flex flex-col">{children}</main>
+        <div className="min-h-dvh flex flex-col">
+          <Navigation />
+          <main className="flex-grow flex flex-col">{children}</main>
+        </div>
         <Footer />
         <Script 
           src="https://static.cloudflareinsights.com/beacon.min.js"
