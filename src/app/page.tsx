@@ -185,22 +185,16 @@ export default function Home() {
   }, []);
 
   return (
-    <div>
-      <div className="flex-1 flex flex-col items-center justify-center min-h-[75vh] px-6">
-        <div className="max-w-6xl w-full flex flex-col md:flex-row items-center justify-center gap-12 md:gap-20 animate-in fade-in slide-in-from-bottom-8 duration-700">
-          <div className="flex flex-col text-center md:text-left order-2 md:order-1">
-            <h1 className="text-5xl md:text-[5.5rem] font-heading font-black tracking-tighter leading-[1.05] text-text">
-              Hello, my
-              <br />
-              name&apos;s Anas.
-              <br />
-              I&apos;m always <br />
-              Learning.
-            </h1>
-          </div>
+    <div className="flex flex-1 flex-col">
+      <section className="flex flex-1 items-center">
+        <div className="mx-auto grid min-h-[70vh] w-full max-w-6xl items-center gap-10 px-6 py-12 md:grid-cols-2 md:gap-8 animate-in fade-in slide-in-from-bottom-8 duration-700">
+          <h1 className="order-2 text-center text-5xl font-heading font-black leading-[1.05] tracking-tighter text-text md:order-1 md:text-left md:text-6xl lg:text-[5.5rem]">
+            <span className="block text-balance">Hello, my name&apos;s Anas.</span>
+            <span className="block text-balance">I&apos;m always learning.</span>
+          </h1>
 
           {/* Crumbling paper reel — timeline driven by hand closeness */}
-          <div className="relative shrink-0 order-1 md:order-2">
+          <div className="relative order-1 flex justify-center md:order-2 md:justify-end">
             <div ref={shakeRef} className="will-change-transform">
               <video
                 ref={videoRef}
@@ -208,7 +202,7 @@ export default function Home() {
                 muted
                 playsInline
                 preload="auto"
-                className="w-84 h-84 md:w-124 md:h-124 object-contain -scale-x-100"
+                className="h-72 w-72 -scale-x-100 object-contain md:h-96 md:w-96 lg:h-[31rem] lg:w-[31rem]"
               />
             </div>
 
@@ -225,34 +219,34 @@ export default function Home() {
             </AnimatePresence>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Camera controls, bottom-left just above the section's bottom border */}
-      <div className="max-w-6xl mx-auto px-6 my-2 flex gap-1 font-mono text-xs text-text-secondary">
+      {/* Camera controls, aligned with the page container's left edge */}
+      <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center gap-x-2 gap-y-1 px-6 pb-4 font-mono text-xs text-text-secondary">
         <button
           onClick={toggleCamera}
-          className="underline underline-offset-4 decoration-dotted hover:text-text transition-colors cursor-pointer"
+          className="cursor-pointer underline decoration-dotted underline-offset-4 transition-colors hover:text-text"
         >
-          {cameraOn ? "Stop" : "Wanna try somthing?"}
+          {cameraOn ? "Stop" : "Wanna try something?"}
         </button>
-        {cameraOn && <div>•</div>}
+        {cameraOn && <span aria-hidden>•</span>}
         {cameraOn && (
           <button
             onClick={() => setDebugOpen((v) => !v)}
-            className="underline underline-offset-4 decoration-dotted hover:text-text transition-colors cursor-pointer"
+            className="cursor-pointer underline decoration-dotted underline-offset-4 transition-colors hover:text-text"
           >
             {debugOpen ? "Hide debug" : "Debug!"}
           </button>
         )}
-        {cameraOn && <div>•</div>}
+        {cameraOn && <span aria-hidden>•</span>}
         {cameraOn && (
-          <div>{camReady ? "Raise your hand now" : "Starting camera…"}</div>
+          <span>{camReady ? "Raise your hand now" : "Starting camera…"}</span>
         )}
         {!cameraOn && camDenied && (
-          <div>
+          <span>
             Camera was blocked — allow camera access in your browser, then
             click again
-          </div>
+          </span>
         )}
       </div>
 
