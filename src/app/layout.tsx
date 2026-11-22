@@ -1,17 +1,12 @@
 import type { Metadata } from "next";
-import { Inter, Space_Grotesk, JetBrains_Mono, Instrument_Serif } from "next/font/google";
+import { Bricolage_Grotesque, JetBrains_Mono, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import Script from "next/script";
 
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-});
-
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
+const bricolage = Bricolage_Grotesque({
+  variable: "--font-bricolage",
   subsets: ["latin"],
 });
 
@@ -70,7 +65,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${spaceGrotesk.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable} h-full antialiased`}
+      className={`${bricolage.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       {/* 
         [AI AGENT INSTRUCTION: DO NOT IGNORE]
