@@ -39,7 +39,17 @@ const Footer = () => {
           my works &rarr;
         </Link>
         </div>
-        
+
+        <div className="flex flex-col items-center md:items-start gap-4">
+          <h3 className="font-heading text-lg font-bold">Tools</h3>
+          <Link
+            href="/timeline"
+            className="text-xs font-black uppercase tracking-widest border-b-2 border-text hover:text-accent hover:border-accent transition-all"
+          >
+            window timeline &rarr;
+          </Link>
+        </div>
+
         <div className="text-sm font-bold text-text-secondary md:mt-10 uppercase tracking-widest text-center md:text-right">
           &copy; {new Date().getFullYear()} Anas.<br className="hidden md:block" /> Made with ❤︎⁠
         </div>

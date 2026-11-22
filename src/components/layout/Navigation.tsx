@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Book, CalendarRange, LayoutGrid } from "lucide-react";
+import { Book, LayoutGrid } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 
@@ -13,7 +13,6 @@ const Navigation = () => {
   const navItems = [
     { href: "/projects", label: "Projects", icon: LayoutGrid },
     { href: "/blog", label: "Blog", icon: Book },
-    { href: "/timeline", label: "Timeline", icon: CalendarRange },
   ];
 
   return (
