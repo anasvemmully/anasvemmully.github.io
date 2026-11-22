@@ -22,7 +22,7 @@ const link =
 
 const Footer = () => (
   <footer className="overflow-hidden border-t border-border bg-bg">
-    <div className="mx-auto grid max-w-6xl gap-10 px-6 pt-12 pb-8 grid-cols-2 md:grid-cols-3">
+    <div className="mx-auto flex max-w-6xl flex-wrap justify-start gap-x-16 gap-y-10 px-6 pt-12 pb-8">
       <nav aria-label="Explore">
         <h3 className={heading}>Explore</h3>
         <ul className="space-y-3">
@@ -66,8 +66,8 @@ const Footer = () => (
 
     {/* Decorative wordmark: bottom-right, cropped so ~4/5 of the lettering shows */}
     <div className="mx-auto flex max-w-6xl justify-end px-6" aria-hidden="true">
-      <div className="h-[0.56em] select-none overflow-hidden text-[clamp(3.5rem,11.5vw,11.5rem)]">
-        <span className="block font-heading font-black uppercase leading-[0.75] tracking-tighter text-text/15">
+      <div className="h-[0.64em] select-none overflow-hidden text-[clamp(3.5rem,11.5vw,11.5rem)]">
+        <span className="block font-heading font-black uppercase leading-[0.75] tracking-tighter text-text/10">
           ANANAAS
         </span>
       </div>
