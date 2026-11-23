@@ -14,19 +14,32 @@ const exploreLinks = [
   { href: "/works", label: "My works" },
 ];
 
+const toolLinks = [{ href: "https://ozhivu.vemmully.in/", label: "Ozhivu" }];
+
 const heading = "mb-4 font-heading text-sm font-bold uppercase tracking-[0.2em] text-text-secondary";
 const link =
   "text-base font-semibold text-text underline decoration-transparent decoration-2 underline-offset-4 transition-colors hover:decoration-accent";
 
 const Footer = () => (
   <footer className="flex flex-col overflow-hidden border-t border-border bg-bg lg:min-h-[60dvh]">
-    <div className="flex w-full flex-wrap justify-start gap-x-20 gap-y-10 px-6 pt-14 pb-8 md:px-12">
+    <div className="mx-auto flex w-full max-w-6xl flex-wrap justify-start gap-x-20 gap-y-10 px-6 pt-14 pb-8">
       <nav aria-label="Explore">
         <h3 className={heading}>Explore</h3>
         <ul className="space-y-4">
           {exploreLinks.map((l) => (
             <li key={l.href}>
               <Link href={l.href} className={link}>{l.label}</Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <nav aria-label="Tools">
+        <h3 className={heading}>Tools</h3>
+        <ul className="space-y-4">
+          {toolLinks.map((l) => (
+            <li key={l.href}>
+              <a href={l.href} target="_blank" rel="noopener noreferrer" className={link}>{l.label}</a>
             </li>
           ))}
         </ul>
@@ -52,7 +65,7 @@ const Footer = () => (
     </div>
 
     {/* Decorative wordmark: bottom-right, cropped so ~4/5 of the lettering shows */}
-    <div className="mt-auto flex w-full justify-end px-6 md:px-12" aria-hidden="true">
+    <div className="mx-auto mt-auto flex w-full max-w-6xl justify-end px-6" aria-hidden="true">
       <div className="h-[0.64em] select-none overflow-hidden text-[clamp(3.5rem,11.5vw,11.5rem)]">
         <span className="block font-heading font-black uppercase leading-[0.75] tracking-tighter text-text/10">
           ANANAAS
