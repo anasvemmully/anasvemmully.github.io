@@ -31,6 +31,7 @@ function Editor({ initial }: { initial: Timeline }) {
   const [editing, setEditing] = useState<number | "new" | null>(null);
   const [linkLen, setLinkLen] = useState(0);
   const [copied, setCopied] = useState(false);
+  const [sidebar, setSidebar] = useState(() => window.matchMedia("(min-width: 1024px)").matches);
   const [teamName, setTeamName] = useState("");
   const [json, setJson] = useState("");
   const [jsonError, setJsonError] = useState("");
@@ -73,11 +74,14 @@ function Editor({ initial }: { initial: Timeline }) {
   };
 
   return (
-    <div className="mx-auto w-full max-w-6xl px-6 py-8">
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-        <h1 className="font-heading text-3xl font-black uppercase tracking-tighter">Window Timeline</h1>
-        <div className="flex items-center gap-3">
-          <span className={`text-xs font-mono ${linkLen > LINK_WARN ? "font-bold text-red-600" : "text-text-secondary"}`}>
+    <div className="flex min-h-[calc(100dvh-4.1rem)] flex-1 flex-col gap-2 px-3 py-3 sm:px-4">
+      <div className="flex flex-wrap items-center gap-2">
+        <button className={`${btn} bg-surface`} onClick={() => setSidebar((v) => !v)} aria-expanded={sidebar}>
+          {sidebar ? "Hide panel" : "Teams & windows"}
+        </button>
+        <h1 className="font-heading text-xl font-black uppercase tracking-tighter">Window Timeline</h1>
+        <div className="ml-auto flex items-center gap-3">
+          <span className={`hidden text-xs font-mono sm:inline ${linkLen > LINK_WARN ? "font-bold text-red-600" : "text-text-secondary"}`}>
             link ≈ {linkLen} chars{linkLen > LINK_WARN ? " — getting long" : ""}
           </span>
           <button className={`${btn} bg-accent shadow-[3px_3px_0_var(--color-primary-black)]`} onClick={copyLink} disabled={!timeline.teams.length}>
@@ -86,8 +90,9 @@ function Editor({ initial }: { initial: Timeline }) {
         </div>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[320px_1fr]">
-        <aside className="space-y-6">
+      <div className="relative flex min-h-[420px] flex-1 gap-3">
+        {sidebar && (
+        <aside className="space-y-6 overflow-y-auto bg-bg max-lg:absolute max-lg:inset-0 max-lg:z-30 max-lg:p-1 lg:w-80 lg:shrink-0 lg:pr-1">
           <section>
             <h2 className="mb-2 text-xs font-bold uppercase tracking-widest">Teams ({timeline.teams.length}/{MAX_TEAMS})</h2>
             <ul className="mb-2 space-y-1">
@@ -156,8 +161,11 @@ function Editor({ initial }: { initial: Timeline }) {
             {jsonError && <p className="mt-1 text-xs font-bold text-red-600" role="alert">{jsonError}</p>}
           </section>
         </aside>
+        )}
 
-        <TimelineBoard timeline={timeline} zone={zone} onZoneChange={setZone} onSelect={(i) => setEditing(i)} />
+        <div className="flex min-w-0 flex-1 flex-col">
+          <TimelineBoard timeline={timeline} zone={zone} onZoneChange={setZone} onSelect={(i) => setEditing(i)} />
+        </div>
       </div>
     </div>
   );

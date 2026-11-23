@@ -31,3 +31,9 @@ The time standard a Window is defined in. Every person sees the same Window, sho
 
 **Swimlane**
 The primary picture of a Timeline: one lane per Team, time running left to right, each Window a bar (a swimlane Gantt chart).
+
+**Detail level**
+How much the Swimlane's time axis shows, set automatically by how much time is on screen: hours, then days, then weeks and months. It is not a separate setting.
+
+**Now marker**
+A thin line on the Swimlane at the current moment.
