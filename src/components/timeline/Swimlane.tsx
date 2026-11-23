@@ -5,8 +5,24 @@ import { describeRepeat, formatDuration } from "@/lib/timeline/describe";
 import { occurrences } from "@/lib/timeline/occurrences";
 import { findOverlaps } from "@/lib/timeline/overlaps";
 import { formatDateTime, formatDay, formatTime, nowMinutes, startOfDay, type Zone } from "@/lib/timeline/time";
-import { TEAM_COLORS, type Occurrence, type Timeline } from "@/lib/timeline/types";
+import { MAX_LABEL, MAX_TEAMS, MAX_TEAM_NAME, SLOT, TEAM_COLORS, type Occurrence, type Timeline } from "@/lib/timeline/types";
 import { panBy, ticks, zoomAt, type View } from "@/lib/timeline/view";
+
+/** Spreadsheet-style editing on the chart (Editor only). */
+export type EditApi = {
+  create: (team: number, start: number, duration: number) => boolean;
+  /** Shift the Window's start by `shift` minutes and set its duration. */
+  reshape: (window: number, shift: number, duration: number) => void;
+  rename: (window: number, label: string) => void;
+  addTeam: (name: string) => void;
+};
+
+type Gesture =
+  | { kind: "move" | "start" | "end"; window: number; team: number; start: number; end: number; x0: number }
+  | { kind: "create"; team: number; anchor: number; x0: number };
+type Preview = { team: number; start: number; end: number };
+
+const snap = (m: number) => Math.round(m / SLOT) * SLOT;
 
 type Props = {
   timeline: Timeline;
@@ -15,6 +31,7 @@ type Props = {
   zone: Zone;
   onPick: (occ: Occurrence) => void;
   selected?: Occurrence | null;
+  edit?: EditApi;
 };
 
 const LANE = 34;
@@ -45,13 +62,18 @@ function stack(occs: Occurrence[]) {
 
 type Hover = { occ: Occurrence; rect: DOMRect };
 
-export default function Swimlane({ timeline, view, onViewChange, zone, onPick, selected }: Props) {
-  const hasTeams = timeline.teams.length > 0;
+export default function Swimlane({ timeline, view, onViewChange, zone, onPick, selected, edit }: Props) {
+  const hasTeams = timeline.teams.length > 0 || !!edit;
   const root = useRef<HTMLDivElement>(null);
   const plot = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(0);
   const [hover, setHover] = useState<Hover | null>(null);
   const [now, setNow] = useState(() => nowMinutes());
+  const [preview, setPreview] = useState<Preview | null>(null);
+  const [renaming, setRenaming] = useState<{ window: number; start: number } | null>(null);
+  const [newTeam, setNewTeam] = useState("");
+  const editRef = useRef(edit);
+  const windowsRef = useRef(timeline.windows.length);
 
   // Always-current view for the native event handlers below.
   const viewRef = useRef(view);
@@ -61,6 +83,8 @@ export default function Swimlane({ timeline, view, onViewChange, zone, onPick, s
     viewRef.current = view;
     widthRef.current = width;
     changeRef.current = onViewChange;
+    editRef.current = edit;
+    windowsRef.current = timeline.windows.length;
   });
 
   useEffect(() => {
@@ -70,7 +94,7 @@ export default function Swimlane({ timeline, view, onViewChange, zone, onPick, s
     ro.observe(el);
     setWidth(el.clientWidth);
     return () => ro.disconnect();
-  }, [timeline.teams.length]);
+  }, [hasTeams]);
 
   useEffect(() => {
     const t = setInterval(() => setNow(nowMinutes()), 30000);
@@ -106,14 +130,54 @@ export default function Swimlane({ timeline, view, onViewChange, zone, onPick, s
       return Math.hypot(a.x - b.x, a.y - b.y);
     };
 
+    let gesture: Gesture | null = null;
+    const minuteAt = (clientX: number) => {
+      const r = plot.current?.getBoundingClientRect();
+      return viewRef.current.start + (clientX - (r?.left ?? 0)) * pxToMin();
+    };
+    const previewOf = (g: Gesture, clientX: number): Preview => {
+      const dx = (clientX - g.x0) * pxToMin();
+      if (g.kind === "create") {
+        const cur = snap(minuteAt(clientX));
+        const a = Math.min(g.anchor, cur);
+        return { team: g.team, start: a, end: Math.max(Math.max(g.anchor, cur), a + SLOT) };
+      }
+      if (g.kind === "move") return { team: g.team, start: g.start + snap(dx), end: g.end + snap(dx) };
+      if (g.kind === "start") return { team: g.team, start: Math.min(snap(g.start + dx), g.end - SLOT), end: g.end };
+      return { team: g.team, start: g.start, end: Math.max(snap(g.end + dx), g.start + SLOT) };
+    };
+
     const onDown = (e: PointerEvent) => {
       pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
       if (pointers.size === 2) pinchDist = dist();
+      const t = e.target as HTMLElement;
+      if (!editRef.current || e.button !== 0 || e.pointerType === "touch" || pointers.size !== 1 || t.closest("input")) return;
+      const bar = t.closest<HTMLElement>("[data-bar]");
+      const lane = t.closest<HTMLElement>("[data-lane]");
+      if (bar) {
+        const handle = t.closest<HTMLElement>("[data-handle]")?.dataset.handle as "start" | "end" | undefined;
+        gesture = {
+          kind: handle ?? "move", window: +bar.dataset.window!, team: +bar.dataset.team!,
+          start: +bar.dataset.start!, end: +bar.dataset.end!, x0: e.clientX,
+        };
+      } else if (lane) {
+        gesture = { kind: "create", team: +lane.dataset.lane!, anchor: snap(minuteAt(e.clientX)), x0: e.clientX };
+      }
     };
     const onMove = (e: PointerEvent) => {
       const p = pointers.get(e.pointerId);
       if (!p) return;
       const dx = e.clientX - p.x;
+      if (gesture) {
+        if (!dragging && Math.abs(dx) < 4) return;
+        if (!dragging) {
+          dragging = true;
+          setHover(null);
+          try { el.setPointerCapture(e.pointerId); } catch { /* pointer already gone */ }
+        }
+        setPreview(previewOf(gesture, e.clientX));
+        return;
+      }
       if (pointers.size === 2) {
         pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
         const d = dist();
@@ -133,6 +197,18 @@ export default function Swimlane({ timeline, view, onViewChange, zone, onPick, s
       changeRef.current(panBy(viewRef.current, -dx * pxToMin()));
     };
     const onUp = (e: PointerEvent) => {
+      if (gesture && dragging && e.type === "pointerup") {
+        const g = gesture;
+        const p = previewOf(g, e.clientX);
+        const api = editRef.current;
+        if (api) {
+          if (g.kind === "create") {
+            if (api.create(p.team, p.start, p.end - p.start)) setRenaming({ window: windowsRef.current, start: p.start });
+          } else if (p.start !== g.start || p.end !== g.end) api.reshape(g.window, p.start - g.start, p.end - p.start);
+        }
+      }
+      gesture = null;
+      setPreview(null);
       pointers.delete(e.pointerId);
       pinchDist = 0;
       if (pointers.size === 0) setTimeout(() => (dragging = false), 0);
@@ -187,7 +263,7 @@ export default function Swimlane({ timeline, view, onViewChange, zone, onPick, s
 
   const { marks, groups, level } = useMemo(() => ticks(view, width || 1000, zone), [view, width, zone]);
 
-  if (timeline.teams.length === 0) {
+  if (!hasTeams) {
     return <p className="p-8 text-text-secondary">No teams yet.</p>;
   }
 
@@ -242,7 +318,7 @@ export default function Swimlane({ timeline, view, onViewChange, zone, onPick, s
                 <span className="size-3 shrink-0 rounded-sm border border-text" style={{ background: TEAM_COLORS[team.color] }} />
                 <span className="truncate" title={team.name}>{team.name}</span>
               </div>
-              <div className="relative min-w-0 flex-1 overflow-hidden" style={{ height: Math.max(rows[i].lanes * LANE + 14, 56) }}>
+              <div data-lane={i} className={`relative min-w-0 flex-1 overflow-hidden ${edit ? "cursor-crosshair" : ""}`} style={{ height: Math.max(rows[i].lanes * LANE + 14, 56) }}>
                 {marks.map((m) => (
                   <span key={m.at} className={`absolute inset-y-0 border-l ${m.strong ? "border-text/20" : "border-text/10"}`} style={{ left: x(m.at) }} />
                 ))}
@@ -256,23 +332,79 @@ export default function Swimlane({ timeline, view, onViewChange, zone, onPick, s
                     <button
                       key={`${o.window}-${o.start}`}
                       type="button"
+                      data-bar
+                      data-window={o.window}
+                      data-team={o.team}
+                      data-start={o.start}
+                      data-end={o.end}
                       onClick={() => { setHover(null); onPick(o); }}
+                      onDoubleClick={edit ? () => { setHover(null); setRenaming({ window: o.window, start: o.start }); } : undefined}
                       onMouseEnter={(e) => setHover({ occ: o, rect: e.currentTarget.getBoundingClientRect() })}
                       onMouseLeave={() => setHover(null)}
                       onFocus={(e) => setHover({ occ: o, rect: e.currentTarget.getBoundingClientRect() })}
                       onBlur={() => setHover(null)}
                       aria-label={`${team.name}: ${text}, ${formatDateTime(o.start, zone)} to ${formatTime(o.end, zone)}`}
-                      className={`absolute z-10 flex flex-col justify-center overflow-hidden rounded-sm border-2 border-text px-1.5 text-left text-xs font-bold leading-[1.05] text-black shadow-[1px_1px_0_var(--color-primary-black)] hover:brightness-95 focus-visible:ring-2 focus-visible:ring-text ${selected && selected.window === o.window && selected.start === o.start ? "outline outline-[3px] outline-offset-1 outline-red-600" : ""}`}
+                      className={`absolute z-10 flex flex-col justify-center ${edit ? "cursor-grab active:cursor-grabbing" : ""} overflow-hidden rounded-sm border-2 border-text px-1.5 text-left text-xs font-bold leading-[1.05] text-black shadow-[1px_1px_0_var(--color-primary-black)] hover:brightness-95 focus-visible:ring-2 focus-visible:ring-text ${selected && selected.window === o.window && selected.start === o.start ? "outline outline-[3px] outline-offset-1 outline-red-600" : ""}`}
                       style={{ left, width: barW, top: 7 + lane * LANE, height: LANE - 6, background: TEAM_COLORS[team.color] }}
                     >
                       {barW >= MIN_TEXT_PX && <span className="truncate">{text}</span>}
                       {barW >= 96 && timeText && <span className="truncate text-[10px] font-medium opacity-70">{timeText}</span>}
+                      {edit && barW >= 18 && (
+                        <>
+                          <span data-handle="start" className="absolute inset-y-0 left-0 w-1.5 cursor-ew-resize hover:bg-black/25" />
+                          <span data-handle="end" className="absolute inset-y-0 right-0 w-1.5 cursor-ew-resize hover:bg-black/25" />
+                        </>
+                      )}
                     </button>
                   );
                 })}
+                {preview && preview.team === i && (
+                  <div
+                    className="pointer-events-none absolute z-20 flex items-center overflow-hidden rounded-sm border-2 border-dashed border-text bg-text/10 px-1.5 text-[11px] font-bold"
+                    style={{ left: x(preview.start), width: Math.max((preview.end - preview.start) * ppm, 3), top: 7, height: LANE - 6 }}
+                  >
+                    <span className="truncate">{formatTime(preview.start, zone)}–{formatTime(preview.end, zone)}</span>
+                  </div>
+                )}
+                {renaming && edit && timeline.windows[renaming.window]?.team === i && (
+                  <input
+                    autoFocus
+                    aria-label="Window label"
+                    maxLength={MAX_LABEL}
+                    defaultValue={timeline.windows[renaming.window].label}
+                    placeholder="Label"
+                    className="absolute z-30 rounded-sm border-2 border-text bg-surface px-1.5 text-xs font-bold outline-none"
+                    style={{ left: Math.max(x(renaming.start), 0), width: Math.max((timeline.windows[renaming.window].duration) * ppm, 160), top: 7 + (rows[i].laid.find((l) => l.o.window === renaming.window && l.o.start === renaming.start)?.lane ?? 0) * LANE, height: LANE - 6 }}
+                    onFocus={(e) => e.currentTarget.select()}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") { edit.rename(renaming.window, e.currentTarget.value); setRenaming(null); }
+                      else if (e.key === "Escape") setRenaming(null);
+                      e.stopPropagation();
+                    }}
+                    onBlur={(e) => { if (renaming) { edit.rename(renaming.window, e.currentTarget.value); setRenaming(null); } }}
+                  />
+                )}
               </div>
             </div>
           ))}
+          {edit && timeline.teams.length < MAX_TEAMS && (
+            <div className="flex border-b border-text/15">
+              <form
+                className={`${cell} sticky left-0 z-20 flex items-center border-r-2 border-text bg-surface px-1`}
+                onSubmit={(e) => { e.preventDefault(); const n = newTeam.trim(); if (n) { edit.addTeam(n); setNewTeam(""); } }}
+              >
+                <input
+                  value={newTeam}
+                  maxLength={MAX_TEAM_NAME}
+                  onChange={(e) => setNewTeam(e.target.value)}
+                  placeholder="+ Add team"
+                  aria-label="Add team"
+                  className="w-full rounded-sm bg-transparent px-1.5 py-2 text-sm font-bold outline-none placeholder:text-text-secondary focus:bg-bg"
+                />
+              </form>
+              <div className="h-11 min-w-0 flex-1" />
+            </div>
+          )}
           {/* overlap shading + now line across every lane */}
           <div className="pointer-events-none absolute inset-0 z-[5] flex">
             <div className={cell} />

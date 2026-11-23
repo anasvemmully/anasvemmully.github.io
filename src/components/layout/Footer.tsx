@@ -39,7 +39,7 @@ const Footer = () => (
         <ul className="space-y-4">
           {toolLinks.map((l) => (
             <li key={l.href}>
-              <Link href={l.href} className={link}>{l.label}</Link>
+              <a href={l.href} className={link}>{l.label}</a>
             </li>
           ))}
         </ul>

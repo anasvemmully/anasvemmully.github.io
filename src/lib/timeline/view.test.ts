@@ -18,7 +18,7 @@ describe("zoomAt", () => {
 
   it("clamps to the min and max span", () => {
     expect(zoomAt({ start: MON, span: 2 * H }, 100, 0.5).span).toBe(MIN_SPAN);
-    expect(zoomAt({ start: MON, span: 80 * DAY }, 0.01, 0.5).span).toBe(MAX_SPAN);
+    expect(zoomAt({ start: MON, span: 80 * DAY }, 0.0001, 0.5).span).toBe(MAX_SPAN);
   });
 });
 
@@ -43,6 +43,22 @@ describe("detailLevel", () => {
     expect(detailLevel(7 * DAY)).toBe("day");
     expect(detailLevel(21 * DAY)).toBe("day");
     expect(detailLevel(45 * DAY)).toBe("week");
+    expect(detailLevel(120 * DAY)).toBe("week");
+    expect(detailLevel(300 * DAY)).toBe("month");
+  });
+});
+
+describe("ticks (months)", () => {
+  it("labels months with years as groups when zoomed far out", () => {
+    const t = ticks({ start: MON, span: 400 * DAY }, 1200, "utc");
+    expect(t.level).toBe("month");
+    expect(t.marks.filter((m) => m.label).length).toBeGreaterThanOrEqual(12);
+    expect(t.groups.length).toBeGreaterThanOrEqual(2);
+  });
+
+  it("allows zooming out to about two years", () => {
+    expect(zoomAt({ start: MON, span: 80 * DAY }, 0.001, 0.5).span).toBe(MAX_SPAN);
+    expect(MAX_SPAN).toBeGreaterThanOrEqual(700 * DAY);
   });
 });
 

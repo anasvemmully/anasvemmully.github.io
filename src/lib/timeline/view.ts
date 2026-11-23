@@ -3,10 +3,10 @@ import { DAY } from "./types";
 
 /** What the Swimlane is showing: the instant at the left edge and how many minutes fit across. */
 export type View = { start: number; span: number };
-export type Level = "hour" | "day" | "week";
+export type Level = "hour" | "day" | "week" | "month";
 
 export const MIN_SPAN = 6 * 60;
-export const MAX_SPAN = 90 * DAY;
+export const MAX_SPAN = 2 * 365 * DAY;
 
 const clampSpan = (s: number) => Math.min(MAX_SPAN, Math.max(MIN_SPAN, s));
 
@@ -27,7 +27,8 @@ export function zoomToRange(start: number, end: number): View {
 export function detailLevel(span: number): Level {
   if (span <= 36 * 60) return "hour";
   if (span <= 21 * DAY) return "day";
-  return "week";
+  if (span <= 120 * DAY) return "week";
+  return "month";
 }
 
 export type Mark = { at: number; label: string; strong: boolean };
@@ -55,6 +56,17 @@ export function ticks(v: View, width: number, zone: Zone): { level: Level; marks
         if (at + stepMin < v.start) continue;
         marks.push({ at, label: formatTime(at, zone), strong: m === 0 });
       }
+    }
+    return { level, marks, groups };
+  }
+
+  if (level === "month") {
+    const stride = Math.max(1, Math.ceil(MIN_LABEL_PX / (pxPerMin * 30 * DAY)));
+    let i = 0;
+    for (let m = startOfMonth(v.start, zone); m < end; m = addMonths(m, 1, zone), i++) {
+      const jan = formatDay(m, zone, { month: "numeric" }) === "1";
+      marks.push({ at: m, label: i % stride === 0 ? formatDay(m, zone, { month: "short" }) : "", strong: jan });
+      if (jan || i === 0) groups.push({ at: m, label: formatDay(m, zone, { year: "numeric" }) });
     }
     return { level, marks, groups };
   }

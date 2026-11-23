@@ -1,7 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import TimelineBoard from "./TimelineBoard";
+import type { EditApi } from "./Swimlane";
 import WindowForm from "./WindowForm";
 import { useFragmentTimeline } from "./useFragment";
 import { encodeTimeline } from "@/lib/timeline/codec";
@@ -73,24 +75,45 @@ function Editor({ initial }: { initial: Timeline }) {
     try { await navigator.clipboard.writeText(url); setCopied(true); setTimeout(() => setCopied(false), 1500); } catch { prompt("Copy this link", url); }
   };
 
-  return (
-    <div className="flex min-h-[calc(100dvh-4.1rem)] flex-1 flex-col gap-2 px-3 py-3 sm:px-4">
-      <div className="flex flex-wrap items-center gap-2">
-        <button className={`${btn} bg-surface`} onClick={() => setSidebar((v) => !v)} aria-expanded={sidebar}>
-          {sidebar ? "Hide panel" : "Teams & windows"}
-        </button>
-        <h1 className="font-heading text-xl font-black uppercase tracking-tighter">Window Timeline</h1>
-        <div className="ml-auto flex items-center gap-3">
-          <span className={`hidden text-xs font-mono sm:inline ${linkLen > LINK_WARN ? "font-bold text-red-600" : "text-text-secondary"}`}>
-            link ≈ {linkLen} chars{linkLen > LINK_WARN ? " — getting long" : ""}
-          </span>
-          <button className={`${btn} bg-accent shadow-[3px_3px_0_var(--color-primary-black)]`} onClick={copyLink} disabled={!timeline.teams.length}>
-            {copied ? "Copied!" : "Copy share link"}
-          </button>
-        </div>
-      </div>
+  const edit: EditApi = {
+    create: (team, start, duration) => {
+      if (timeline.windows.length >= MAX_WINDOWS) return false;
+      setTimeline({ ...timeline, windows: [...timeline.windows, { team, label: "", start, duration, repeat: { kind: "none" } }] });
+      return true;
+    },
+    reshape: (i, shift, duration) =>
+      setTimeline({ ...timeline, windows: timeline.windows.map((w, k) => (k === i ? { ...w, start: w.start + shift, duration } : w)) }),
+    rename: (i, label) =>
+      setTimeline({ ...timeline, windows: timeline.windows.map((w, k) => (k === i ? { ...w, label: label.trim().slice(0, MAX_LABEL) } : w)) }),
+    addTeam: (name) => {
+      if (timeline.teams.length >= MAX_TEAMS) return;
+      setTimeline({ ...timeline, teams: [...timeline.teams, { name: name.slice(0, MAX_TEAM_NAME), color: timeline.teams.length % TEAM_COLORS.length }] });
+    },
+  };
 
-      <div className="relative flex min-h-[420px] flex-1 gap-3">
+  const leading = (
+    <>
+      <Link href="/" className={`${btn} bg-surface`} aria-label="Back to site">←</Link>
+      <button className={`${btn} bg-surface`} onClick={() => setSidebar((v) => !v)} aria-expanded={sidebar}>
+        {sidebar ? "Hide panel" : "Teams & windows"}
+      </button>
+      <h1 className="hidden font-heading text-base font-black uppercase tracking-tighter md:block">Window Timeline</h1>
+    </>
+  );
+  const trailing = (
+    <>
+      <span className={`hidden text-xs font-mono xl:inline ${linkLen > LINK_WARN ? "font-bold text-red-600" : "text-text-secondary"}`}>
+        link ≈ {linkLen} chars{linkLen > LINK_WARN ? " — getting long" : ""}
+      </span>
+      <button className={`${btn} bg-accent shadow-[2px_2px_0_var(--color-primary-black)]`} onClick={copyLink} disabled={!timeline.teams.length}>
+        {copied ? "Copied!" : "Copy share link"}
+      </button>
+    </>
+  );
+
+  return (
+    <div className="flex h-dvh min-h-0 flex-col gap-2 p-2">
+      <div className="relative flex min-h-0 flex-1 gap-3">
         {sidebar && (
         <aside className="space-y-6 overflow-y-auto bg-bg max-lg:absolute max-lg:inset-0 max-lg:z-30 max-lg:p-1 lg:w-80 lg:shrink-0 lg:pr-1">
           <section>
@@ -163,8 +186,8 @@ function Editor({ initial }: { initial: Timeline }) {
         </aside>
         )}
 
-        <div className="flex min-w-0 flex-1 flex-col">
-          <TimelineBoard timeline={timeline} zone={zone} onZoneChange={setZone} onSelect={(i) => setEditing(i)} />
+        <div className="flex min-h-0 min-w-0 flex-1 flex-col">
+          <TimelineBoard timeline={timeline} zone={zone} onZoneChange={setZone} onSelect={(i) => setEditing(i)} edit={edit} leading={leading} trailing={trailing} />
         </div>
       </div>
     </div>

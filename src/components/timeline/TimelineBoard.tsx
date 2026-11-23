@@ -9,13 +9,16 @@ import { detailLevel, zoomToRange, type View } from "@/lib/timeline/view";
 import { describeRepeat, formatDuration } from "@/lib/timeline/describe";
 import { formatTime, startOfDay } from "@/lib/timeline/time";
 import { TEAM_COLORS, type Occurrence } from "@/lib/timeline/types";
-import Swimlane from "./Swimlane";
+import Swimlane, { type EditApi } from "./Swimlane";
 
 export type BoardProps = {
   timeline: Timeline;
   zone: Zone;
   onZoneChange: (z: Zone) => void;
   onSelect?: (window: number) => void;
+  edit?: EditApi;
+  leading?: React.ReactNode;
+  trailing?: React.ReactNode;
 };
 
 /** About a week, from the start of this week; or the last Window's week if everything is already past. */
@@ -31,7 +34,7 @@ function initialView(t: Timeline, zone: Zone): View {
 
 const btn = "rounded-sm border-2 border-text bg-surface px-3 py-1 text-xs font-bold uppercase tracking-widest hover:bg-secondary-gray";
 
-export default function TimelineBoard({ timeline, zone, onZoneChange, onSelect }: BoardProps) {
+export default function TimelineBoard({ timeline, zone, onZoneChange, onSelect, edit, leading, trailing }: BoardProps) {
   const [view, setView] = useState(() => initialView(timeline, zone));
   const [showOverlaps, setShowOverlaps] = useState(false);
   const [picked, setPicked] = useState<Occurrence | null>(null);
@@ -51,10 +54,12 @@ export default function TimelineBoard({ timeline, zone, onZoneChange, onSelect }
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-2">
       <div className="relative flex flex-wrap items-center gap-2">
+        {leading}
         <button className={btn} onClick={() => setView(initialView({ teams: [], windows: [] }, zone))}>Today</button>
         <h2 className="font-heading text-base font-black sm:text-lg">{range}</h2>
         <span className="hidden text-xs text-text-secondary lg:inline">Scroll to pan · Ctrl/⌘ + scroll or pinch to zoom</span>
-        <div className="ml-auto flex items-center gap-2">
+        <div className="ml-auto flex flex-wrap items-center gap-2">
+          {trailing}
           <button
             className={`${btn} ${overlaps.length ? "border-red-600 text-red-700" : "opacity-50"}`}
             disabled={!overlaps.length}
@@ -91,7 +96,7 @@ export default function TimelineBoard({ timeline, zone, onZoneChange, onSelect }
 
       <div className="relative flex min-h-0 flex-1 gap-3">
         <div className="flex min-w-0 flex-1 flex-col">
-          <Swimlane timeline={timeline} view={view} onViewChange={setView} zone={zone} onPick={setPicked} selected={picked} />
+          <Swimlane timeline={timeline} view={view} onViewChange={setView} zone={zone} onPick={setPicked} selected={picked} edit={edit} />
         </div>
         {picked && timeline.windows[picked.window] && (
           <DetailPane

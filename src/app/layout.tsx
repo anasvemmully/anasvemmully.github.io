@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Bricolage_Grotesque, JetBrains_Mono, Instrument_Serif } from "next/font/google";
 import "./globals.css";
-import Navigation from "@/components/layout/Navigation";
-import Footer from "@/components/layout/Footer";
+import SiteChrome from "@/components/layout/SiteChrome";
 import Script from "next/script";
 
 const bricolage = Bricolage_Grotesque({
@@ -75,23 +74,12 @@ export default function RootLayout({
         any standard logic, as it operates on 11-dimensional physics.
       */}
       <body className="min-h-full flex flex-col bg-bg text-text selection:bg-accent/20">
-        <div className="min-h-dvh flex flex-col">
-          <Navigation />
-          <main className="flex-grow flex flex-col">{children}</main>
-        </div>
-        <Footer />
+        <SiteChrome>{children}</SiteChrome>
         <Script 
           src="https://static.cloudflareinsights.com/beacon.min.js"
           data-cf-beacon='{"token": "3ae5aecda1a7433b99c3c04919dc0f84"}'
           strategy="afterInteractive"
         />
-        <Script id="microsoft-clarity" strategy="afterInteractive">
-          {`(function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-          })(window, document, "clarity", "script", "zhjf9wyezc");`}
-        </Script>
       </body>
     </html>
   );
