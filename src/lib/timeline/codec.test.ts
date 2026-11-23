@@ -16,7 +16,36 @@ const sample: Timeline = {
   ],
 };
 
+// A link made with format version 1. It must keep decoding forever (ADR 0001).
+const V1_LINK = "Y2RiYPXMSytKZOdzSSxJzdMNSU3MVXg0ZzIzA59fZnpGSU6lQlJicnZpwYoHlRyMjAx_HlQKsDk-WFzFwOZWlJpalbrwQSUjAwA";
+
+const rich: Timeline = {
+  ...sample,
+  people: [{ gh: "priya-ops" }, { gh: "marco" }],
+  repos: ["acme/platform"],
+  services: ["prod-db", "api"],
+  freezes: [{ label: "Holiday freeze", start: SUN + 1440, duration: 1440 * 3 }],
+  windows: [
+    { ...sample.windows[0], assignees: [0, 1], ref: { repo: 0, num: 4821 }, service: 0 },
+    sample.windows[1],
+    { ...sample.windows[2], service: 1 },
+  ],
+};
+
 describe("timeline codec", () => {
+  it("still decodes a version 1 link", async () => {
+    expect(await decodeTimeline(V1_LINK)).toEqual({ ok: true, timeline: sample });
+  });
+
+  it("round-trips people, GitHub refs, services and freezes", async () => {
+    expect(await decodeTimeline(await encodeTimeline(rich))).toEqual({ ok: true, timeline: rich });
+  });
+
+  it("rejects extras that point outside their tables", async () => {
+    const bad: Timeline = { ...rich, windows: [{ ...rich.windows[0], assignees: [5] }] };
+    expect(await decodeTimeline(await encodeTimeline(bad))).toEqual({ ok: false, reason: "corrupt" });
+  });
+
   it("round-trips a Timeline through its fragment", async () => {
     const fragment = await encodeTimeline(sample);
     expect(await decodeTimeline(fragment)).toEqual({ ok: true, timeline: sample });

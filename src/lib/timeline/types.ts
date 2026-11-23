@@ -16,9 +16,25 @@ export type Window = {
   start: number;
   duration: number; // minutes
   repeat: Repeat;
+  assignees?: number[]; // indexes into Timeline.people
+  ref?: { repo: number; num: number }; // GitHub issue/PR: index into Timeline.repos + number
+  service?: number; // index into Timeline.services
 };
 
-export type Timeline = { teams: Team[]; windows: Window[] };
+/** Identified by GitHub handle only — never an email, since links are shared. */
+export type Person = { gh: string };
+
+/** A period in which no Window should run, for every Team. */
+export type Freeze = { label: string; start: number; duration: number };
+
+export type Timeline = {
+  teams: Team[];
+  windows: Window[];
+  people?: Person[];
+  repos?: string[]; // "owner/repo"
+  services?: string[];
+  freezes?: Freeze[];
+};
 
 export type Occurrence = {
   team: number;
@@ -32,6 +48,14 @@ export const MAX_WINDOWS = 200;
 export const MAX_TEAM_NAME = 24;
 export const MAX_LABEL = 40;
 export const LINK_WARN = 1000;
+export const MAX_PEOPLE = 50;
+export const MAX_ASSIGNEES = 4;
+export const MAX_HANDLE = 39;
+export const MAX_REPOS = 20;
+export const MAX_REPO = 100;
+export const MAX_SERVICES = 20;
+export const MAX_SERVICE = 24;
+export const MAX_FREEZES = 20;
 
 export const TEAM_COLORS = [
   "#FFD600", "#60A5FA", "#34D399", "#F87171", "#C084FC",

@@ -32,7 +32,12 @@ type Props = {
   onPick: (occ: Occurrence) => void;
   selected?: Occurrence | null;
   edit?: EditApi;
+  /** Freeze bands drawn across every lane, and extra content drawn inside each bar. */
+  bands?: Band[];
+  decorate?: (o: Occurrence, barW: number) => React.ReactNode;
 };
+
+export type Band = { start: number; end: number; label: string };
 
 const LANE = 34;
 const MIN_TEXT_PX = 44;
@@ -62,7 +67,7 @@ function stack(occs: Occurrence[]) {
 
 type Hover = { occ: Occurrence; rect: DOMRect };
 
-export default function Swimlane({ timeline, view, onViewChange, zone, onPick, selected, edit }: Props) {
+export default function Swimlane({ timeline, view, onViewChange, zone, onPick, selected, edit, bands, decorate }: Props) {
   const hasTeams = timeline.teams.length > 0 || !!edit;
   const root = useRef<HTMLDivElement>(null);
   const plot = useRef<HTMLDivElement>(null);
@@ -301,6 +306,11 @@ export default function Swimlane({ timeline, view, onViewChange, zone, onPick, s
               </span>
             ))}
           </div>
+          {bands?.map((b) => (
+            <span key={b.start} className="absolute top-6 z-10 truncate rounded-sm bg-sky-700 px-1 text-[10px] font-bold leading-4 text-white" style={{ left: Math.max(x(b.start), 0), maxWidth: Math.max(x(b.end) - Math.max(x(b.start), 0), 0) }}>
+              ❄ {b.label}
+            </span>
+          ))}
           {showNow && (
             <span className="absolute bottom-0 z-10 -translate-x-1/2 rounded-sm bg-red-600 px-1 text-[10px] font-bold leading-4 text-white" style={{ left: x(now) }}>
               now
@@ -349,6 +359,7 @@ export default function Swimlane({ timeline, view, onViewChange, zone, onPick, s
                     >
                       {barW >= MIN_TEXT_PX && <span className="truncate">{text}</span>}
                       {barW >= 96 && timeText && <span className="truncate text-[10px] font-medium opacity-70">{timeText}</span>}
+                      {decorate?.(o, barW)}
                       {edit && barW >= 18 && (
                         <>
                           <span data-handle="start" className="absolute inset-y-0 left-0 w-1.5 cursor-ew-resize hover:bg-black/25" />
@@ -411,6 +422,9 @@ export default function Swimlane({ timeline, view, onViewChange, zone, onPick, s
             <div className="relative min-w-0 flex-1 overflow-hidden">
               {shades.map((s) => (
                 <div key={s.start} className="absolute inset-y-0 bg-red-500/[0.16]" style={{ left: x(s.start), width: Math.max(x(s.end) - x(s.start), 3) }} />
+              ))}
+              {bands?.map((b) => (
+                <div key={b.start} className="absolute inset-y-0 border-x-2 border-sky-700/60" style={{ left: x(b.start), width: Math.max(x(b.end) - x(b.start), 3), backgroundImage: "repeating-linear-gradient(135deg, rgba(3,105,161,.10) 0 8px, rgba(3,105,161,.22) 8px 10px)" }} />
               ))}
               {showNow && <div className="absolute inset-y-0 w-px bg-red-600" style={{ left: x(now) }} />}
             </div>

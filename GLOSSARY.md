@@ -37,3 +37,18 @@ How much the Swimlane's time axis shows, set automatically by how much time is o
 
 **Now marker**
 A thin line on the Swimlane at the current moment.
+
+**Person**
+Someone assigned to Windows, identified only by their GitHub handle. Anyone who has the Share Link can see the handle.
+
+**Assignee**
+A Person responsible for a Window. A Window can have up to four.
+
+**Service**
+A shared system a Window touches, such as a database. Two Teams on the same Service at the same time is a real clash, not just a coincidence in time.
+
+**Freeze**
+A period in which no Window should run, for every Team. It is drawn as a band across all lanes.
+
+**Conflict**
+Anything the Timeline warns about. It is an error when a Window falls inside a Freeze, when two Teams use the same Service at once, or when a Person is double-booked. It is a warning when Windows only overlap in time.

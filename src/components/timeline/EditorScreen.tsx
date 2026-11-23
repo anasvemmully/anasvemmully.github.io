@@ -7,12 +7,13 @@ import type { EditApi } from "./Swimlane";
 import WindowForm from "./WindowForm";
 import { useFragmentTimeline } from "./useFragment";
 import { encodeTimeline } from "@/lib/timeline/codec";
+import { removePerson, removeService, removeTeam as dropTeam, setRef } from "@/lib/timeline/edit";
+import { FreezesSection, PeopleSection, ServicesSection } from "./EditorSections";
 import { nowMinutes, type Zone } from "@/lib/timeline/time";
 import { LINK_WARN, MAX_LABEL, MAX_TEAMS, MAX_TEAM_NAME, MAX_WINDOWS, TEAM_COLORS, type Timeline, type Window } from "@/lib/timeline/types";
 import { parseTimeline } from "@/lib/timeline/validate";
 
-const field = "w-full border-2 border-text bg-surface px-2 py-1 text-sm";
-const btn = "border-2 border-text px-3 py-1 text-xs font-bold uppercase tracking-widest";
+import { btn, field } from "./EditorSections";
 
 export default function EditorScreen() {
   const loaded = useFragmentTimeline();
@@ -29,6 +30,8 @@ export default function EditorScreen() {
 
 function Editor({ initial }: { initial: Timeline }) {
   const [timeline, setTimeline] = useState(initial);
+  // Always update from the latest state, so quick successive edits can't overwrite each other.
+  const update = (f: (t: Timeline) => Timeline) => setTimeline(f);
   const [zone, setZone] = useState<Zone>("local");
   const [editing, setEditing] = useState<number | "new" | null>(null);
   const [linkLen, setLinkLen] = useState(0);
@@ -52,19 +55,20 @@ function Editor({ initial }: { initial: Timeline }) {
   const addTeam = () => {
     const name = teamName.trim();
     if (!name || timeline.teams.length >= MAX_TEAMS) return;
-    setTimeline({ ...timeline, teams: [...timeline.teams, { name, color: timeline.teams.length % TEAM_COLORS.length }] });
+    update((t) => ({ ...t, teams: [...t.teams, { name, color: t.teams.length % TEAM_COLORS.length }] }));
     setTeamName("");
   };
-  const removeTeam = (i: number) =>
-    setTimeline({
-      teams: timeline.teams.filter((_, k) => k !== i),
-      windows: timeline.windows.filter((w) => w.team !== i).map((w) => (w.team > i ? { ...w, team: w.team - 1 } : w)),
-    });
+  const removeTeam = (i: number) => update((t) => dropTeam(t, i));
   const patchTeam = (i: number, p: Partial<Timeline["teams"][number]>) =>
-    setTimeline({ ...timeline, teams: timeline.teams.map((t, k) => (k === i ? { ...t, ...p } : t)) });
+    update((t) => ({ ...t, teams: t.teams.map((x, k) => (k === i ? { ...x, ...p } : x)) }));
 
-  const saveWindow = (w: Window) => {
-    setTimeline({ ...timeline, windows: editing === "new" ? [...timeline.windows, w] : timeline.windows.map((x, k) => (k === editing ? w : x)) });
+  const saveWindow = (w: Window, ref: { repo: string; num: number } | null) => {
+    const target = editing;
+    update((t) => {
+      const i = target === "new" ? t.windows.length : (target as number);
+      const next = { ...t, windows: target === "new" ? [...t.windows, w] : t.windows.map((x, k) => (k === i ? w : x)) };
+      return setRef(next, i, ref);
+    });
     setEditing(null);
   };
 
@@ -78,17 +82,15 @@ function Editor({ initial }: { initial: Timeline }) {
   const edit: EditApi = {
     create: (team, start, duration) => {
       if (timeline.windows.length >= MAX_WINDOWS) return false;
-      setTimeline({ ...timeline, windows: [...timeline.windows, { team, label: "", start, duration, repeat: { kind: "none" } }] });
+      update((t) => ({ ...t, windows: [...t.windows, { team, label: "", start, duration, repeat: { kind: "none" } }] }));
       return true;
     },
     reshape: (i, shift, duration) =>
-      setTimeline({ ...timeline, windows: timeline.windows.map((w, k) => (k === i ? { ...w, start: w.start + shift, duration } : w)) }),
+      update((t) => ({ ...t, windows: t.windows.map((w, k) => (k === i ? { ...w, start: w.start + shift, duration } : w)) })),
     rename: (i, label) =>
-      setTimeline({ ...timeline, windows: timeline.windows.map((w, k) => (k === i ? { ...w, label: label.trim().slice(0, MAX_LABEL) } : w)) }),
-    addTeam: (name) => {
-      if (timeline.teams.length >= MAX_TEAMS) return;
-      setTimeline({ ...timeline, teams: [...timeline.teams, { name: name.slice(0, MAX_TEAM_NAME), color: timeline.teams.length % TEAM_COLORS.length }] });
-    },
+      update((t) => ({ ...t, windows: t.windows.map((w, k) => (k === i ? { ...w, label: label.trim().slice(0, MAX_LABEL) } : w)) })),
+    addTeam: (name) =>
+      update((t) => (t.teams.length >= MAX_TEAMS ? t : { ...t, teams: [...t.teams, { name: name.slice(0, MAX_TEAM_NAME), color: t.teams.length % TEAM_COLORS.length }] })),
   };
 
   const leading = (
@@ -146,7 +148,7 @@ function Editor({ initial }: { initial: Timeline }) {
                 initial={editing === "new" ? blank : timeline.windows[editing]}
                 onSave={saveWindow}
                 onCancel={() => setEditing(null)}
-                onDelete={editing === "new" ? undefined : () => { setTimeline({ ...timeline, windows: timeline.windows.filter((_, k) => k !== editing) }); setEditing(null); }}
+                onDelete={editing === "new" ? undefined : () => { const i = editing; update((t) => setRef(t, i, null)); update((t) => ({ ...t, windows: t.windows.filter((_, k) => k !== i) })); setEditing(null); }}
               />
             ) : (
               <>
@@ -160,7 +162,7 @@ function Editor({ initial }: { initial: Timeline }) {
                       <button className="flex w-full items-center gap-2 border-2 border-text bg-surface px-2 py-1 text-left hover:bg-secondary-gray" onClick={() => setEditing(i)}>
                         <span className="size-3 shrink-0 border border-text" style={{ background: TEAM_COLORS[timeline.teams[w.team].color] }} />
                         <span className="truncate">{timeline.teams[w.team].name}{w.label ? ` · ${w.label.slice(0, MAX_LABEL)}` : ""}</span>
-                        <span className="ml-auto text-[11px] text-text-secondary">{w.repeat.kind}</span>
+                        <span className="ml-auto text-[11px] text-text-secondary">{w.repeat.kind === "none" ? "once" : w.repeat.kind}</span>
                       </button>
                     </li>
                   ))}
@@ -168,6 +170,10 @@ function Editor({ initial }: { initial: Timeline }) {
               </>
             )}
           </section>
+
+          <PeopleSection timeline={timeline} update={update} remove={(i) => update((t) => removePerson(t, i))} />
+          <ServicesSection timeline={timeline} update={update} remove={(i) => update((t) => removeService(t, i))} />
+          <FreezesSection key={zone} timeline={timeline} update={update} zone={zone} />
 
           <section>
             <h2 className="mb-2 text-xs font-bold uppercase tracking-widest">Export / import</h2>

@@ -1,8 +1,17 @@
-import { MAX_LABEL, MAX_TEAMS, MAX_TEAM_NAME, MAX_WINDOWS, SLOT, TEAM_COLORS, type Repeat, type Timeline } from "./types";
+import {
+  MAX_ASSIGNEES, MAX_FREEZES, MAX_HANDLE, MAX_LABEL, MAX_PEOPLE, MAX_REPO, MAX_REPOS, MAX_SERVICE, MAX_SERVICES,
+  MAX_TEAMS, MAX_TEAM_NAME, MAX_WINDOWS, SLOT, TEAM_COLORS, type Repeat, type Timeline, type Window,
+} from "./types";
 
-const VERSION = 1;
+/**
+ * Format versions. Every version ever written must keep decoding (ADR 0001).
+ * v1: teams, windows.
+ * v2: + people, repos and services tables, a per-Window extras byte, freezes.
+ */
+const VERSION = 2;
 const KIND = { none: 0, daily: 1, weekly: 2 } as const;
 const HAS_UNTIL = 4;
+const X_ASSIGNEES = 1, X_REF = 2, X_SERVICE = 4;
 
 export type DecodeResult =
   | { ok: true; timeline: Timeline }
@@ -103,6 +112,10 @@ export async function encodeTimeline(t: Timeline): Promise<string> {
     w.byte(team.color);
     w.text(team.name);
   }
+  const list = (xs: string[] = []) => { w.varint(xs.length); xs.forEach((s) => w.text(s)); };
+  list(t.people?.map((p) => p.gh));
+  list(t.repos);
+  list(t.services);
   w.varint(t.windows.length);
   for (const win of t.windows) {
     w.varint(win.team);
@@ -114,6 +127,17 @@ export async function encodeTimeline(t: Timeline): Promise<string> {
     w.byte(KIND[r.kind] | (until !== undefined ? HAS_UNTIL : 0));
     if (r.kind === "weekly") w.byte(r.days);
     if (until !== undefined) w.slots(until);
+    const x = (win.assignees?.length ? X_ASSIGNEES : 0) | (win.ref ? X_REF : 0) | (win.service !== undefined ? X_SERVICE : 0);
+    w.byte(x);
+    if (win.assignees?.length) { w.varint(win.assignees.length); win.assignees.forEach((a) => w.varint(a)); }
+    if (win.ref) { w.varint(win.ref.repo); w.varint(win.ref.num); }
+    if (win.service !== undefined) w.varint(win.service);
+  }
+  w.varint(t.freezes?.length ?? 0);
+  for (const f of t.freezes ?? []) {
+    w.text(f.label);
+    w.slots(f.start);
+    w.slots(f.duration);
   }
   const packed = await pipe(Uint8Array.from(w.bytes), new CompressionStream("deflate-raw"));
   return toBase64Url(packed);
@@ -129,7 +153,8 @@ export async function decodeTimeline(fragment: string): Promise<DecodeResult> {
       throw new Corrupt();
     }
     const r = new Reader(raw);
-    if (r.byte() !== VERSION) throw new Unsupported();
+    const version = r.byte();
+    if (version !== 1 && version !== 2) throw new Unsupported();
     const teams: Timeline["teams"] = [];
     const teamCount = r.varint();
     if (teamCount > MAX_TEAMS) throw new Corrupt();
@@ -139,6 +164,19 @@ export async function decodeTimeline(fragment: string): Promise<DecodeResult> {
       if (color >= TEAM_COLORS.length || name.length > MAX_TEAM_NAME) throw new Corrupt();
       teams.push({ name, color });
     }
+    const list = (max: number, maxLen: number) => {
+      if (version < 2) return [];
+      const n = r.varint();
+      if (n > max) throw new Corrupt();
+      return Array.from({ length: n }, () => {
+        const s = r.text();
+        if (!s || s.length > maxLen) throw new Corrupt();
+        return s;
+      });
+    };
+    const people = list(MAX_PEOPLE, MAX_HANDLE);
+    const repos = list(MAX_REPOS, MAX_REPO);
+    const services = list(MAX_SERVICES, MAX_SERVICE);
     const count = r.varint();
     if (count > MAX_WINDOWS) throw new Corrupt();
     const windows: Timeline["windows"] = [];
@@ -163,10 +201,47 @@ export async function decodeTimeline(fragment: string): Promise<DecodeResult> {
         if (repeat.kind === "none") throw new Corrupt();
         repeat.until = r.slots();
       }
-      windows.push({ team, label, start, duration, repeat });
+      const win: Window = { team, label, start, duration, repeat };
+      if (version >= 2) {
+        const x = r.byte();
+        if (x & ~(X_ASSIGNEES | X_REF | X_SERVICE)) throw new Corrupt();
+        if (x & X_ASSIGNEES) {
+          const n = r.varint();
+          if (n < 1 || n > MAX_ASSIGNEES) throw new Corrupt();
+          win.assignees = Array.from({ length: n }, () => r.varint());
+          if (win.assignees.some((a) => a >= people.length)) throw new Corrupt();
+        }
+        if (x & X_REF) {
+          const repo = r.varint();
+          const num = r.varint();
+          if (repo >= repos.length || num < 1) throw new Corrupt();
+          win.ref = { repo, num };
+        }
+        if (x & X_SERVICE) {
+          win.service = r.varint();
+          if (win.service >= services.length) throw new Corrupt();
+        }
+      }
+      windows.push(win);
+    }
+    const timeline: Timeline = { teams, windows };
+    if (version >= 2) {
+      const n = r.varint();
+      if (n > MAX_FREEZES) throw new Corrupt();
+      const freezes = Array.from({ length: n }, () => {
+        const label = r.text();
+        const start = r.slots();
+        const duration = r.slots();
+        if (label.length > MAX_LABEL || duration <= 0) throw new Corrupt();
+        return { label, start, duration };
+      });
+      if (people.length) timeline.people = people.map((gh) => ({ gh }));
+      if (repos.length) timeline.repos = repos;
+      if (services.length) timeline.services = services;
+      if (freezes.length) timeline.freezes = freezes;
     }
     r.done();
-    return { ok: true, timeline: { teams, windows } };
+    return { ok: true, timeline };
   } catch (e) {
     if (e instanceof Unsupported) return { ok: false, reason: "unsupported-version" };
     return { ok: false, reason: "corrupt" };
