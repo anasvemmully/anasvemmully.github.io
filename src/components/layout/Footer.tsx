@@ -14,11 +14,6 @@ const exploreLinks = [
   { href: "/works", label: "My works" },
 ];
 
-const toolLinks = [
-  { href: "/timeline", label: "Window timeline" },
-  { href: "/timeline/guide", label: "Timeline guide" },
-];
-
 const heading = "mb-4 font-heading text-sm font-bold uppercase tracking-[0.2em] text-text-secondary";
 const link =
   "text-base font-semibold text-text underline decoration-transparent decoration-2 underline-offset-4 transition-colors hover:decoration-accent";
@@ -32,17 +27,6 @@ const Footer = () => (
           {exploreLinks.map((l) => (
             <li key={l.href}>
               <Link href={l.href} className={link}>{l.label}</Link>
-            </li>
-          ))}
-        </ul>
-      </nav>
-
-      <nav aria-label="Tools">
-        <h3 className={heading}>Tools</h3>
-        <ul className="space-y-4">
-          {toolLinks.map((l) => (
-            <li key={l.href}>
-              <a href={l.href} className={link}>{l.label}</a>
             </li>
           ))}
         </ul>
