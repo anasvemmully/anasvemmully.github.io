@@ -30,7 +30,7 @@ export default function ViewerScreen() {
             timeline={loaded.timeline}
             zone={zone}
             onZoneChange={setZone}
-            leading={<Link href="/" className={`${btn} bg-surface`} aria-label="Back to site">←</Link>}
+            leading={<><Link href="/" className={`${btn} bg-surface`} aria-label="Back to site">←</Link><Link href="/timeline/guide" className={`${btn} bg-surface`} aria-label="How to use the timeline" title="Guide">?</Link></>}
             trailing={
               <button className={`${btn} bg-accent shadow-[2px_2px_0_var(--color-primary-black)]`} onClick={() => (window.location.href = `/timeline${window.location.hash}`)}>
                 Open in editor

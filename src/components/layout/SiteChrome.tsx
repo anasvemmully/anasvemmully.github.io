@@ -5,9 +5,10 @@ import Script from "next/script";
 import Navigation from "./Navigation";
 import Footer from "./Footer";
 
-/** The site header/footer wrap every page except the Window Timeline tool, which is a full-screen app. */
+/** The site header/footer wrap every page except the Window Timeline tool itself (editor and viewer), which is a full-screen app. Its guide keeps the chrome. */
 export default function SiteChrome({ children }: { children: React.ReactNode }) {
-  const tool = usePathname().startsWith("/timeline");
+  const pathname = usePathname();
+  const tool = pathname === "/timeline" || pathname.startsWith("/timeline/view");
   if (tool) return <main className="flex h-dvh flex-col overflow-hidden">{children}</main>;
   return (
     <>

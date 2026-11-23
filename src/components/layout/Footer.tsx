@@ -14,7 +14,10 @@ const exploreLinks = [
   { href: "/works", label: "My works" },
 ];
 
-const toolLinks = [{ href: "/timeline", label: "Window timeline" }];
+const toolLinks = [
+  { href: "/timeline", label: "Window timeline" },
+  { href: "/timeline/guide", label: "Timeline guide" },
+];
 
 const heading = "mb-4 font-heading text-sm font-bold uppercase tracking-[0.2em] text-text-secondary";
 const link =

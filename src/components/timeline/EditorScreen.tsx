@@ -95,7 +95,7 @@ function Editor({ initial }: { initial: Timeline }) {
 
   const leading = (
     <>
-      <Link href="/" className={`${btn} bg-surface`} aria-label="Back to site">←</Link>
+      <Link href="/" className={`${btn} bg-surface`} aria-label="Back to site">←</Link><Link href="/timeline/guide" className={`${btn} bg-surface`} aria-label="How to use the timeline" title="Guide">?</Link>
       <button className={`${btn} bg-surface`} onClick={() => setSidebar((v) => !v)} aria-expanded={sidebar}>
         {sidebar ? "Hide panel" : "Teams & windows"}
       </button>
