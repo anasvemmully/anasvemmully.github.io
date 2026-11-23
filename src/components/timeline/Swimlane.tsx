@@ -13,7 +13,8 @@ type Props = {
   view: View;
   onViewChange: (v: View) => void;
   zone: Zone;
-  onSelect?: (window: number) => void;
+  onPick: (occ: Occurrence) => void;
+  selected?: Occurrence | null;
 };
 
 const LANE = 34;
@@ -44,7 +45,7 @@ function stack(occs: Occurrence[]) {
 
 type Hover = { occ: Occurrence; rect: DOMRect };
 
-export default function Swimlane({ timeline, view, onViewChange, zone, onSelect }: Props) {
+export default function Swimlane({ timeline, view, onViewChange, zone, onPick, selected }: Props) {
   const hasTeams = timeline.teams.length > 0;
   const root = useRef<HTMLDivElement>(null);
   const plot = useRef<HTMLDivElement>(null);
@@ -255,16 +256,13 @@ export default function Swimlane({ timeline, view, onViewChange, zone, onSelect 
                     <button
                       key={`${o.window}-${o.start}`}
                       type="button"
-                      onClick={(e) => {
-                        if (onSelect) onSelect(o.window);
-                        else setHover({ occ: o, rect: e.currentTarget.getBoundingClientRect() });
-                      }}
+                      onClick={() => { setHover(null); onPick(o); }}
                       onMouseEnter={(e) => setHover({ occ: o, rect: e.currentTarget.getBoundingClientRect() })}
                       onMouseLeave={() => setHover(null)}
                       onFocus={(e) => setHover({ occ: o, rect: e.currentTarget.getBoundingClientRect() })}
                       onBlur={() => setHover(null)}
                       aria-label={`${team.name}: ${text}, ${formatDateTime(o.start, zone)} to ${formatTime(o.end, zone)}`}
-                      className="absolute z-10 flex flex-col justify-center overflow-hidden rounded-sm border-2 border-text px-1.5 text-left text-xs font-bold leading-[1.05] text-black shadow-[1px_1px_0_var(--color-primary-black)] hover:brightness-95 focus-visible:ring-2 focus-visible:ring-text"
+                      className={`absolute z-10 flex flex-col justify-center overflow-hidden rounded-sm border-2 border-text px-1.5 text-left text-xs font-bold leading-[1.05] text-black shadow-[1px_1px_0_var(--color-primary-black)] hover:brightness-95 focus-visible:ring-2 focus-visible:ring-text ${selected && selected.window === o.window && selected.start === o.start ? "outline outline-[3px] outline-offset-1 outline-red-600" : ""}`}
                       style={{ left, width: barW, top: 7 + lane * LANE, height: LANE - 6, background: TEAM_COLORS[team.color] }}
                     >
                       {barW >= MIN_TEXT_PX && <span className="truncate">{text}</span>}
