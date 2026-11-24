@@ -3,6 +3,12 @@
  * attribute on <html>: CSS reads it, React subscribes to it, and the saved
  * choice in localStorage only decides what it is set to.
  *
+ * The site is dark until a visitor picks light. Their pick is saved in
+ * localStorage, so it stays across reloads, visits and tabs (on that browser).
+ * CSS treats dark as the baseline, so it also applies before the attribute is
+ * set and with JavaScript off; if the default ever changes, flip the baseline
+ * in globals.css too.
+ *
  * Nothing here touches the DOM when imported, so it is safe to import from
  * server code (the no-flash script does, for the storage key).
  */
@@ -12,8 +18,10 @@ export type Point = { x: number; y: number };
 
 export const THEME_KEY = "anas-theme";
 
+/** What a visitor sees until they choose. */
+export const DEFAULT_THEME: Theme = "dark";
+
 const root = () => document.documentElement;
-const prefersDark = () => matchMedia("(prefers-color-scheme: dark)");
 
 function savedTheme(): Theme | null {
   try {
@@ -25,24 +33,24 @@ function savedTheme(): Theme | null {
 }
 
 /** The theme on screen right now. */
-export const currentTheme = (): Theme => (root().dataset.theme === "dark" ? "dark" : "light");
+export const currentTheme = (): Theme => {
+  const set = root().dataset.theme;
+  return set === "light" || set === "dark" ? set : DEFAULT_THEME;
+};
 
-/** Points the attribute at the saved choice, or at the system setting when there isn't one. */
+/** Points the attribute at the saved choice, or at the default when there isn't one. */
 function syncWithSettings() {
-  const theme = savedTheme() ?? (prefersDark().matches ? "dark" : "light");
+  const theme = savedTheme() ?? DEFAULT_THEME;
   if (theme !== currentTheme()) root().dataset.theme = theme;
 }
 
-/** For useSyncExternalStore: tells React when the theme changes, and keeps it in step with the system and other tabs. */
+/** For useSyncExternalStore: tells React when the theme changes, and keeps it in step with other tabs. */
 export function subscribe(onChange: () => void) {
   const observer = new MutationObserver(onChange);
   observer.observe(root(), { attributes: true, attributeFilter: ["data-theme"] });
-  const system = prefersDark();
-  system.addEventListener("change", syncWithSettings);
   window.addEventListener("storage", syncWithSettings);
   return () => {
     observer.disconnect();
-    system.removeEventListener("change", syncWithSettings);
     window.removeEventListener("storage", syncWithSettings);
   };
 }

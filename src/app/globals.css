@@ -1,13 +1,18 @@
 @import "tailwindcss";
 
-/* `dark:` utilities follow the site's theme switch (see src/lib/theme), not the OS setting */
-@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+/*
+ * `dark:` utilities follow the site's theme switch (see src/lib/theme). The site
+ * is dark unless <html data-theme="light">, so this also holds before the
+ * attribute is set and with JavaScript off.
+ */
+@custom-variant dark (&:where(:root:not([data-theme="light"]), :root:not([data-theme="light"]) *));
 
 /*
- * Theme values that aren't Tailwind utilities. Light is the default; the dark
- * theme (<html data-theme="dark">, set by src/lib/theme) overrides these and the
- * semantic color tokens in @theme below, so components never need to know which
- * theme is active.
+ * Theme values that aren't Tailwind utilities. The values in this first :root
+ * and in @theme below are the LIGHT theme, used when <html data-theme="light">.
+ * The site is dark by default, so the block after it overrides them for every
+ * other case (src/lib/theme sets the attribute). Components never need to know
+ * which theme is active.
  */
 :root {
   color-scheme: light;
@@ -24,7 +29,7 @@
   --ink-green-4: #216e39;
 }
 
-:root[data-theme="dark"] {
+:root:not([data-theme="light"]) {
   color-scheme: dark;
 
   --color-bg: #0e0e10;
