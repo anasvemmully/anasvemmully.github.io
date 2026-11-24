@@ -1,34 +1,60 @@
-import Image from "next/image";
+import { Manrope, Roboto } from "next/font/google";
+import PageContainer from "@/components/layout/PageContainer";
+import ProjectCard, { type Project } from "@/components/ProjectCard";
+
+const INTRO = "Products I've built. Both are live, so you can try them yourself.";
 
 export const metadata = {
-  title: "Projects | Anas",
-  description: "Exciting projects coming soon.",
+  title: "Projects",
+  description:
+    "Products built by Anas, including Ozhivu, a timeline planner, and ComRaid, a service for sending app notifications.",
 };
+
+/*
+ * Each card's title is set in the font of the site it shows. They're loaded
+ * here, so they only ship with this page. Descriptions use this site's font.
+ */
+const roboto = Roboto({ subsets: ["latin"], weight: "700" });
+const manrope = Manrope({ subsets: ["latin"], weight: "700" });
+
+const projects: Project[] = [
+  {
+    title: "Ozhivu",
+    description:
+      "A planning tool for scheduling work. You lay out each team's jobs on one timeline that you can zoom in and out of, and it points out any jobs that clash. When the plan is ready, you share it as a link. Nothing you enter is stored anywhere, so your plan stays private.",
+    url: "https://ozhivu.vemmully.in/",
+    logo: { src: "/images/projects/ozhivu.svg", width: 32, height: 32 },
+    panel: "#f9fbfd",
+    titleFont: `${roboto.className} text-2xl font-bold`,
+  },
+  {
+    title: "ComRaid",
+    description:
+      "A service that lets businesses send notifications to their customers' phones, on both Android and iPhone. A team picks who to reach, writes the message, sends it right away or schedules it for later, and then sees how many people received and opened it. Businesses start for free and pay according to how many people they message each month.",
+    url: "https://comraid.io/",
+    logo: { src: "/images/projects/comraid.png", width: 414, height: 414 },
+    panel: "#1d1d1a",
+    titleFont: `${manrope.className} text-2xl font-bold`,
+  },
+];
 
 export default function ProjectsPage() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-[70vh] px-6 text-center">
-      <div className="max-w-md w-full animate-in fade-in slide-in-from-bottom-8 duration-700">
-        <div className="relative w-48 h-48 md:w-64 md:h-64 mx-auto mb-10 border-4 border-text shadow-[8px_8px_0_var(--color-primary-black)] bg-white overflow-hidden">
-          <Image 
-            src="/images/thinking.gif" 
-            alt="Thinking" 
-            fill 
-            className="object-cover"
-            unoptimized
-          />
-        </div>
-        
-        <h1 className="text-4xl md:text-6xl font-heading font-black tracking-tighter text-text mb-6 uppercase">
-          PROJECTS
+    <PageContainer>
+      <header className="mb-12 md:mb-16">
+        <h1 className="font-heading text-5xl font-black uppercase leading-none tracking-tighter text-text md:text-7xl">
+          Projects
         </h1>
-        
-        <div className="inline-block bg-accent px-4 py-2 border-2 border-text shadow-[4px_4px_0_var(--color-primary-black)]">
-          <p className="text-xl font-black text-text uppercase tracking-widest animate-pulse">
-            in progress thinking...
-          </p>
-        </div>
-      </div>
-    </div>
+        <p className="mt-4 max-w-xl text-base font-medium text-text-secondary md:text-lg">
+          {INTRO}
+        </p>
+      </header>
+
+      <ul className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+        {projects.map((project) => (
+          <ProjectCard key={project.title} project={project} />
+        ))}
+      </ul>
+    </PageContainer>
   );
 }
