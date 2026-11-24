@@ -76,12 +76,13 @@ function pixelPath(rows: string[], originX: number, originY: number) {
 const GROUND_Y = 50;
 const dinoPath = pixelPath(DINO, 18, GROUND_Y - DINO.length + 1);
 const cactusPath = pixelPath(CACTUS, 104, GROUND_Y - CACTUS.length + 1);
-const cloudPath =
-  pixelPath(CLOUD, 78, 9) + pixelPath(CLOUD, 38, 18) + pixelPath(CLOUD, 128, 22);
+const cloudPath = pixelPath(CLOUD, 78, 9) + pixelPath(CLOUD, 38, 18) + pixelPath(CLOUD, 128, 22);
 // The horizon: a line with a few bumps and gaps, like the game's ground
 const groundPath =
   `M0,${GROUND_Y}h150v1h-150z` +
-  [9, 31, 58, 77, 99, 121, 141].map((x) => `M${x},${GROUND_Y + 2}h${2 + (x % 3)}v1h-${2 + (x % 3)}z`).join("");
+  [9, 31, 58, 77, 99, 121, 141]
+    .map((x) => `M${x},${GROUND_Y + 2}h${2 + (x % 3)}v1h-${2 + (x % 3)}z`)
+    .join("");
 
 const links = [
   { href: "/", label: "Home" },
@@ -90,8 +91,7 @@ const links = [
   { href: "/blog", label: "Blog" },
 ];
 
-const focus =
-  "focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-text";
+const focus = "focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-text";
 
 export default function NotFound() {
   const path = usePathname();

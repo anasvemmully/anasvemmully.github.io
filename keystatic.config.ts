@@ -15,8 +15,7 @@ import { block } from "@keystatic/core/content-components";
  * NEXT_PUBLIC_ variable because this file also runs in the browser.)
  */
 const useGithub =
-  process.env.NODE_ENV !== "development" ||
-  process.env.NEXT_PUBLIC_KEYSTATIC_STORAGE === "github";
+  process.env.NODE_ENV !== "development" || process.env.NEXT_PUBLIC_KEYSTATIC_STORAGE === "github";
 
 export default config({
   storage: useGithub
@@ -54,6 +53,10 @@ export default config({
           label: "Cover image",
           directory: "public/images/posts/cover",
           publicPath: "/images/posts/cover/",
+        }),
+        time: fields.integer({
+          label: "Reading time (minutes)",
+          description: "Optional. Leave empty to calculate it from the post.",
         }),
         author: fields.text({ label: "Author", defaultValue: "Anas" }),
         content: fields.mdx({

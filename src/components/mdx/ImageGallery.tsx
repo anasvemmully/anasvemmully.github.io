@@ -13,12 +13,7 @@ const ImageGallery = ({ images = [] }: ImageGalleryProps) => {
             key={i}
             className="relative h-[250px] aspect-[4/3] flex-shrink-0 rounded-2xl overflow-hidden shadow-lg border border-border"
           >
-            <Image
-              src={src}
-              alt={`Gallery image ${i}`}
-              fill
-              className="object-cover"
-            />
+            <Image src={src} alt={`Gallery image ${i}`} fill className="object-cover" />
           </div>
         ))}
       </div>

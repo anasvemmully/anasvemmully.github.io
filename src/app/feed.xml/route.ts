@@ -4,7 +4,9 @@ export async function GET() {
   const posts = getAllPosts();
   const site_url = "https://anas.vemmully.in";
 
-  const feedItems = posts.map((post) => `
+  const feedItems = posts
+    .map(
+      (post) => `
     <item>
       <title><![CDATA[${post.title}]]></title>
       <link>${site_url}/blog/${post.slug}</link>
@@ -13,7 +15,9 @@ export async function GET() {
       <description><![CDATA[${post.description}]]></description>
       ${post.tags.map((tag) => `<category><![CDATA[${tag}]]></category>`).join("")}
     </item>
-  `).join("");
+  `,
+    )
+    .join("");
 
   const feed = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">

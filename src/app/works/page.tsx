@@ -2,7 +2,8 @@ import { Bebas_Neue, Outfit, Poppins, Yeseva_One } from "next/font/google";
 import PageContainer from "@/components/layout/PageContainer";
 import ProjectCard, { type Project } from "@/components/ProjectCard";
 
-const INTRO = "Websites I've built for real businesses. They're all live, so go ahead and click around.";
+const INTRO =
+  "Websites I've built for real businesses. They're all live, so go ahead and click around.";
 
 export const metadata = {
   title: "Works",

@@ -4,7 +4,11 @@ import { HiOutlineMail } from "react-icons/hi";
 
 const socialLinks = [
   { href: "https://github.com/anasvemmully", icon: FaGithub, label: "GitHub" },
-  { href: "https://www.linkedin.com/in/muhammed-anas-536a7b201/", icon: FaLinkedin, label: "LinkedIn" },
+  {
+    href: "https://www.linkedin.com/in/muhammed-anas-536a7b201/",
+    icon: FaLinkedin,
+    label: "LinkedIn",
+  },
   { href: "mailto:anas@vemmully.in", icon: HiOutlineMail, label: "Email" },
 ];
 
@@ -16,7 +20,8 @@ const exploreLinks = [
 
 const toolLinks = [{ href: "https://ozhivu.vemmully.in/", label: "Ozhivu" }];
 
-const heading = "mb-4 font-heading text-sm font-bold uppercase tracking-[0.2em] text-text-secondary";
+const heading =
+  "mb-4 font-heading text-sm font-bold uppercase tracking-[0.2em] text-text-secondary";
 const link =
   "text-base font-semibold text-text underline decoration-transparent decoration-2 underline-offset-4 transition-colors hover:decoration-accent";
 
@@ -28,7 +33,9 @@ const Footer = () => (
         <ul className="space-y-4">
           {exploreLinks.map((l) => (
             <li key={l.href}>
-              <Link href={l.href} className={link}>{l.label}</Link>
+              <Link href={l.href} className={link}>
+                {l.label}
+              </Link>
             </li>
           ))}
         </ul>
@@ -39,7 +46,9 @@ const Footer = () => (
         <ul className="space-y-4">
           {toolLinks.map((l) => (
             <li key={l.href}>
-              <a href={l.href} target="_blank" rel="noopener noreferrer" className={link}>{l.label}</a>
+              <a href={l.href} target="_blank" rel="noopener noreferrer" className={link}>
+                {l.label}
+              </a>
             </li>
           ))}
         </ul>
