@@ -12,9 +12,9 @@ const POSTS_PER_PAGE = 12;
 /** The search box only appears once there are this many posts. */
 const SEARCH_MIN_POSTS = 8;
 
-const SHADOW = "shadow-[8px_8px_0_var(--color-primary-black)]";
+const SHADOW = "shadow-[8px_8px_0_var(--color-shadow)]";
 const PRESS =
-  "transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[4px_4px_0_var(--color-primary-black)]";
+  "transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[4px_4px_0_var(--color-shadow)]";
 
 /** "29 Apr 2026". Fixed locale and time zone, so server and browser agree. */
 function formatDate(date: string) {
@@ -50,7 +50,7 @@ function Tags({ tags }: { tags: string[] }) {
       {tags.map((tag) => (
         <li
           key={tag}
-          className="bg-text px-2 py-1 text-xs font-bold uppercase tracking-widest text-accent"
+          className="bg-tag-bg px-2 py-1 text-xs font-bold uppercase tracking-widest text-tag-text"
         >
           {tag}
         </li>
@@ -64,9 +64,9 @@ function FeaturedPost({ post, latest }: { post: PostMetadata; latest: boolean })
   return (
     <Link
       href={`/blog/${post.slug}`}
-      className={`group grid border-4 border-text bg-surface md:grid-cols-2 ${SHADOW} ${PRESS}`}
+      className={`group grid border-4 border-border bg-surface md:grid-cols-2 ${SHADOW} ${PRESS}`}
     >
-      <div className="relative min-h-56 border-b-4 border-text bg-accent md:min-h-80 md:border-b-0 md:border-r-4">
+      <div className="relative min-h-56 border-b-4 border-border bg-accent md:min-h-80 md:border-b-0 md:border-r-4">
         {post.coverImage && (
           <Image
             src={post.coverImage}
@@ -81,7 +81,7 @@ function FeaturedPost({ post, latest }: { post: PostMetadata; latest: boolean })
 
       <div className="flex flex-col gap-4 p-6 md:p-8">
         {latest && (
-          <span className="w-fit border-2 border-text bg-accent px-2 py-0.5 font-mono text-xs font-bold uppercase tracking-widest">
+          <span className="w-fit border-2 border-border bg-accent px-2 py-0.5 font-mono text-on-accent text-xs font-bold uppercase tracking-widest">
             Latest
           </span>
         )}
@@ -128,7 +128,7 @@ function PostRow({ post }: { post: PostMetadata }) {
         </div>
 
         {post.coverImage && (
-          <div className="relative hidden aspect-[4/3] border-2 border-text md:block">
+          <div className="relative hidden aspect-[4/3] border-2 border-border md:block">
             <Image src={post.coverImage} alt="" fill sizes="144px" className="object-cover" />
           </div>
         )}
@@ -199,7 +199,7 @@ export default function BlogContent({ allPosts }: { allPosts: PostMetadata[] }) 
               }}
               placeholder="Search posts"
               aria-label="Search posts"
-              className="w-full border-4 border-text bg-surface py-3 pl-11 pr-4 font-bold shadow-[4px_4px_0_var(--color-primary-black)] outline-none transition-all placeholder:font-medium placeholder:text-text-secondary/60 focus:translate-x-[2px] focus:translate-y-[2px] focus:shadow-[2px_2px_0_var(--color-primary-black)]"
+              className="w-full border-4 border-border bg-surface py-3 pl-11 pr-4 font-bold shadow-[4px_4px_0_var(--color-shadow)] outline-none transition-all placeholder:font-medium placeholder:text-text-secondary/60 focus:translate-x-[2px] focus:translate-y-[2px] focus:shadow-[2px_2px_0_var(--color-shadow)]"
             />
           </div>
         )}
@@ -216,8 +216,10 @@ export default function BlogContent({ allPosts }: { allPosts: PostMetadata[] }) 
                   setPage(1);
                 }}
                 aria-pressed={activeTag === tag}
-                className={`border-2 border-text px-3 py-1 text-xs font-bold uppercase tracking-widest transition-colors ${
-                  activeTag === tag ? "bg-text text-accent" : "bg-surface hover:bg-accent"
+                className={`border-2 border-border px-3 py-1 text-xs font-bold uppercase tracking-widest transition-colors ${
+                  activeTag === tag
+                    ? "bg-tag-bg text-tag-text"
+                    : "bg-surface hover:bg-accent hover:text-on-accent"
                 }`}
               >
                 {tag ?? "All"}
@@ -232,7 +234,7 @@ export default function BlogContent({ allPosts }: { allPosts: PostMetadata[] }) 
           {featured && <FeaturedPost post={featured} latest={!filtered} />}
 
           {rows.length > 0 && (
-            <ul className="divide-y-2 divide-text border-y-2 border-text">
+            <ul className="divide-y-2 divide-border border-y-2 border-border">
               {rows.map((post) => (
                 <PostRow key={post.slug} post={post} />
               ))}
@@ -246,7 +248,7 @@ export default function BlogContent({ allPosts }: { allPosts: PostMetadata[] }) 
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 disabled={page === 1}
                 aria-label="Previous page"
-                className="border-4 border-text bg-surface p-3 shadow-[4px_4px_0_var(--color-primary-black)] transition-colors hover:bg-accent disabled:cursor-not-allowed disabled:opacity-30"
+                className="border-4 border-border bg-surface p-3 shadow-[4px_4px_0_var(--color-shadow)] transition-colors hover:bg-accent hover:text-on-accent disabled:cursor-not-allowed disabled:opacity-30"
               >
                 <ChevronLeft size={20} />
               </button>
@@ -258,7 +260,7 @@ export default function BlogContent({ allPosts }: { allPosts: PostMetadata[] }) 
                 onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                 disabled={page === totalPages}
                 aria-label="Next page"
-                className="border-4 border-text bg-surface p-3 shadow-[4px_4px_0_var(--color-primary-black)] transition-colors hover:bg-accent disabled:cursor-not-allowed disabled:opacity-30"
+                className="border-4 border-border bg-surface p-3 shadow-[4px_4px_0_var(--color-shadow)] transition-colors hover:bg-accent hover:text-on-accent disabled:cursor-not-allowed disabled:opacity-30"
               >
                 <ChevronRight size={20} />
               </button>
@@ -266,7 +268,7 @@ export default function BlogContent({ allPosts }: { allPosts: PostMetadata[] }) 
           )}
         </>
       ) : (
-        <div className="border-4 border-dashed border-text bg-surface px-6 py-16 text-center">
+        <div className="border-4 border-dashed border-border bg-surface px-6 py-16 text-center">
           <p className="text-xl font-bold text-text-secondary">
             {filtered ? "No posts match that." : "No posts yet. Check back soon."}
           </p>

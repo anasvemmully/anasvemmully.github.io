@@ -42,7 +42,7 @@ const PainCloud = ({
       onAnimationComplete={() => onDone(id)}
       className="absolute left-1/2 top-1/3 -translate-x-1/2 pointer-events-none z-20"
     >
-      <span className="inline-block bg-white border-3 border-text rounded-full px-4 py-1.5 font-heading font-black text-lg md:text-xl text-text shadow-[4px_4px_0_var(--color-primary-black)] whitespace-nowrap">
+      <span className="inline-block bg-surface border-3 border-text rounded-full px-4 py-1.5 font-heading font-black text-lg md:text-xl text-text shadow-[4px_4px_0_var(--color-shadow)] whitespace-nowrap">
         {word}
       </span>
     </motion.div>

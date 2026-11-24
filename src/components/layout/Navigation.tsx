@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { Book, LayoutGrid } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
+import ThemeToggle from "./ThemeToggle";
 
 const Navigation = () => {
   const pathname = usePathname();
@@ -16,7 +17,7 @@ const Navigation = () => {
   ];
 
   return (
-    <header className="w-full border-b-1">
+    <header className="w-full border-b border-border">
       <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
         <Link
           href="/"
@@ -76,32 +77,35 @@ const Navigation = () => {
             S
           </motion.span>
         </Link>
-        <nav>
-          <ul className="flex items-center gap-6">
-            {navItems.map((item) => {
-              const isActive =
-                item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
+        <div className="flex items-center gap-6">
+          <nav>
+            <ul className="flex items-center gap-6">
+              {navItems.map((item) => {
+                const isActive =
+                  item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
 
-              return (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    className={`text-sm font-bold uppercase tracking-widest transition-colors ${
-                      isActive
-                        ? "text-text border-b-2 border-accent pb-1"
-                        : "text-text-secondary hover:text-text"
-                    }`}
-                  >
-                    <span className="flex items-center gap-2">
-                      <item.icon size={16} />
-                      {item.label}
-                    </span>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
+                return (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      className={`text-sm font-bold uppercase tracking-widest transition-colors ${
+                        isActive
+                          ? "text-text border-b-2 border-accent pb-1"
+                          : "text-text-secondary hover:text-text"
+                      }`}
+                    >
+                      <span className="flex items-center gap-2">
+                        <item.icon size={16} />
+                        {item.label}
+                      </span>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
+          <ThemeToggle />
+        </div>
       </div>
     </header>
   );

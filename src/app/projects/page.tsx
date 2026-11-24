@@ -23,8 +23,9 @@ const projects: Project[] = [
     description:
       "A planning tool for scheduling work. You lay out each team's jobs on one timeline that you can zoom in and out of, and it points out any jobs that clash. When the plan is ready, you share it as a link. Nothing you enter is stored anywhere, so your plan stays private.",
     url: "https://ozhivu.vemmully.in/",
-    logo: { src: "/images/projects/ozhivu.svg", width: 32, height: 32 },
-    panel: "#f9fbfd",
+    // Ozhivu's pills on its own indigo; the icon's tile is left out so it doesn't vanish into the panel
+    logo: { src: "/images/projects/ozhivu-mark.svg", width: 22, height: 18 },
+    panel: "#4f46e5",
     titleFont: `${roboto.className} text-2xl font-bold`,
   },
   {
