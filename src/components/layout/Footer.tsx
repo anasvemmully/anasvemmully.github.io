@@ -64,7 +64,7 @@ const Footer = () => (
               target="_blank"
               rel="noopener noreferrer"
               aria-label={label}
-              className="border-2 border-text bg-bg-alt p-2 text-text shadow-[2px_2px_0_var(--color-primary-black)] transition-all hover:translate-x-[1px] hover:translate-y-[1px] hover:bg-accent hover:text-black hover:shadow-[1px_1px_0_var(--color-primary-black)]"
+              className="border-2 border-text bg-bg-alt p-2 text-text shadow-[2px_2px_0_var(--color-shadow)] transition-all hover:translate-x-[1px] hover:translate-y-[1px] hover:bg-accent hover:text-black hover:shadow-[1px_1px_0_var(--color-shadow)]"
             >
               <Icon size={22} />
             </Link>

@@ -102,7 +102,7 @@ export default function NotFound() {
 
       <div className="mx-auto w-full max-w-6xl px-6 text-center">
         {/* The scene, with the score in the corner like the game's */}
-        <div className="mx-auto w-full max-w-2xl text-[#535353]">
+        <div className="mx-auto w-full max-w-2xl text-text-secondary">
           <p aria-hidden className="mb-2 text-right font-mono text-sm tracking-widest">
             HI 00404
           </p>
@@ -138,7 +138,7 @@ export default function NotFound() {
               <li key={href}>
                 <Link
                   href={href}
-                  className={`border-b-2 border-transparent pb-0.5 transition-colors hover:border-text hover:bg-accent ${focus}`}
+                  className={`border-b-2 border-transparent pb-0.5 transition-colors hover:border-text hover:bg-accent hover:text-on-accent ${focus}`}
                 >
                   {label}
                 </Link>

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { STILL_FRAME_SECONDS } from "./pixel-ink/config";
+import { useTheme } from "@/lib/theme";
 import { createRenderer } from "./pixel-ink/renderer";
 
 /**
@@ -12,12 +13,16 @@ import { createRenderer } from "./pixel-ink/renderer";
  * load, and the wall fades toward its edges and behind the heading.
  *
  * Meant as a decorative background: the parent should be `relative`, and the
- * canvas fills it. Colors come from the `--ink-green-*` CSS variables. Where
+ * canvas fills it. Colors come from the `--ink-green-*` CSS variables, so the
+ * wall follows the light/dark theme. Where
  * WebGPU isn't supported the canvas simply stays empty. Tunables live in
  * `pixel-ink/config.ts`.
  */
 export default function PixelInk({ className = "" }: { className?: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { theme } = useTheme();
+  // Set once the renderer exists: re-reads the colors and, if frozen, redraws
+  const refreshColors = useRef(() => {});
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -50,6 +55,11 @@ export default function PixelInk({ className = "" }: { className?: string }) {
         if (reducedMotion.matches) renderer.draw(STILL_FRAME_SECONDS);
       });
 
+      refreshColors.current = () => {
+        renderer.refreshColors();
+        if (reducedMotion.matches) renderer.draw(STILL_FRAME_SECONDS);
+      };
+
       renderer.resize();
       startOrFreeze();
       resizeObserver.observe(canvas);
@@ -68,6 +78,9 @@ export default function PixelInk({ className = "" }: { className?: string }) {
       stop();
     };
   }, []);
+
+  // The colors come from CSS, which has already switched by the time `theme` changes
+  useEffect(() => refreshColors.current(), [theme]);
 
   return (
     <canvas

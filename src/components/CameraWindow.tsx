@@ -301,7 +301,7 @@ export default function CameraWindow({
 
   return (
     <div
-      className="fixed z-50 border-4 border-text bg-primary-black shadow-[8px_8px_0_var(--color-primary-black)] select-none"
+      className="fixed z-50 border-4 border-text bg-primary-black shadow-[8px_8px_0_var(--color-shadow)] select-none"
       style={{
         left: pos.x,
         top: pos.y,

@@ -8,7 +8,7 @@ import ImageGallery from "./ImageGallery";
 
 const MDXComponents = {
   img: (props: React.HTMLProps<HTMLImageElement>) => (
-    <div className="my-8 overflow-hidden border-4 border-text shadow-[6px_6px_0_var(--color-primary-black)]">
+    <div className="my-8 overflow-hidden border-4 border-text shadow-[6px_6px_0_var(--color-shadow)]">
       {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
       {/* @ts-ignore */}
       <Image
@@ -28,7 +28,7 @@ const MDXComponents = {
         <Link
           href={href}
           {...props}
-          className="text-accent font-bold underline underline-offset-4 decoration-text hover:bg-accent hover:text-text transition-all"
+          className="text-accent font-bold underline underline-offset-4 decoration-text hover:bg-accent hover:text-on-accent transition-all"
         />
       );
     }
@@ -37,7 +37,7 @@ const MDXComponents = {
         target="_blank"
         rel="noopener noreferrer"
         {...props}
-        className="text-accent font-bold underline underline-offset-4 decoration-text hover:bg-accent hover:text-text transition-all"
+        className="text-accent font-bold underline underline-offset-4 decoration-text hover:bg-accent hover:text-on-accent transition-all"
       />
     );
   },
@@ -66,13 +66,13 @@ const MDXComponents = {
   blockquote: (props: React.HTMLProps<HTMLQuoteElement>) => (
     <blockquote
       {...props}
-      className="border-l-8 border-accent bg-surface px-6 py-4 my-8 italic text-lg text-text font-serif shadow-[4px_4px_0_var(--color-primary-black)]"
+      className="border-l-8 border-accent bg-surface px-6 py-4 my-8 italic text-lg text-text font-serif shadow-[4px_4px_0_var(--color-shadow)]"
     />
   ),
   hr: () => <hr className="my-12 border-t-4 border-dashed border-text" />,
   pre: (props: React.HTMLProps<HTMLPreElement>) => (
-    <div className="my-8 overflow-hidden border-4 border-text shadow-[6px_6px_0_var(--color-primary-black)] bg-code-bg">
-      <pre {...props} className="p-6 overflow-x-auto text-sm font-mono text-surface" />
+    <div className="my-8 overflow-hidden border-4 border-text shadow-[6px_6px_0_var(--color-shadow)] bg-code-bg">
+      <pre {...props} className="p-6 overflow-x-auto text-sm font-mono text-white" />
     </div>
   ),
   YouTube,

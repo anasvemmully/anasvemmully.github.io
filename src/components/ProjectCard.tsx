@@ -21,7 +21,7 @@ export default function ProjectCard({ project }: { project: Project }) {
   const { title, description, url, logo, panel, titleFont } = project;
 
   return (
-    <li className="group flex flex-col border-4 border-text bg-surface shadow-[8px_8px_0_var(--color-primary-black)] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[4px_4px_0_var(--color-primary-black)]">
+    <li className="group flex flex-col border-4 border-text bg-surface shadow-[8px_8px_0_var(--color-shadow)] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[4px_4px_0_var(--color-shadow)]">
       <Link
         href={url}
         target="_blank"

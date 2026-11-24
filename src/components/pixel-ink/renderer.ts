@@ -14,6 +14,8 @@ const BLOBS_OFFSET = 24;
 export type Renderer = {
   /** Matches the canvas to its CSS size and re-reads the green ramp. */
   resize(): void;
+  /** Re-reads the green ramp from the CSS variables, after the theme changes. */
+  refreshColors(): void;
   /** Draws the wall as it looks `t` seconds after it appeared. */
   draw(t: number): void;
   dispose(): void;
@@ -81,6 +83,10 @@ export async function createRenderer(canvas: HTMLCanvasElement): Promise<Rendere
       height = rect.height;
       canvas.width = Math.max(1, Math.round(width * dpr));
       canvas.height = Math.max(1, Math.round(height * dpr));
+      ramp = readRamp(canvas);
+    },
+
+    refreshColors() {
       ramp = readRamp(canvas);
     },
 
