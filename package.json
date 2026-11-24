@@ -9,6 +9,8 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@keystatic/core": "^0.6.10",
+    "@keystatic/next": "^5.0.5",
     "@mediapipe/tasks-vision": "^0.10.35",
     "framer-motion": "^12.38.0",
     "fuse.js": "^7.3.0",
