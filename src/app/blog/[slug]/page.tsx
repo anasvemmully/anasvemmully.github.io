@@ -4,7 +4,8 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import MDXComponents from "@/components/mdx/MDXComponents";
 import Image from "next/image";
 import rehypeSlug from "rehype-slug";
-import TableOfContents from "@/components/mdx/TableOfContents";
+import Link from "next/link";
+import TableOfContents, { END_OF_POST_ID } from "@/components/mdx/TableOfContents";
 import BlogAnimationWrapper from "@/components/blog/BlogAnimationWrapper";
 import PageContainer from "@/components/layout/PageContainer";
 
@@ -54,33 +55,44 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const wordCount = post.content.split(/\s+/).length;
   const readTime = Math.ceil(wordCount / 200);
 
+  const published = new Date(post.metadata.date).toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  });
+
   return (
     <BlogAnimationWrapper>
       <PageContainer as="article">
-        <header className="flex flex-col items-center text-center gap-6 mb-12 max-w-4xl mx-auto">
-          <h1 className="text-4xl md:text-6xl font-heading font-black tracking-tighter leading-[1.1] text-text">
+        <header className="mb-14 max-w-4xl md:mb-16">
+          <h1 className="font-heading text-[clamp(2.5rem,7vw,5rem)] font-black leading-[0.98] tracking-tighter text-balance text-text">
             {post.metadata.title}
           </h1>
 
-          <div className="flex items-center gap-4 text-sm text-text-secondary font-medium font-mono uppercase tracking-wider">
-            <span>
-              {new Date(post.metadata.date)
-                .toLocaleDateString("en-US", {
-                  month: "numeric",
-                  day: "numeric",
-                  year: "2-digit",
-                })
-                .replace(/\//g, ".")}
-            </span>
-            <span className="w-1.5 h-1.5 rounded-full bg-accent" />
-            <span>{readTime} MIN READ</span>
+          {/* The yellow tile, the site's own mark, divides the facts */}
+          <div className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-3 text-base text-text-secondary">
+            {post.metadata.author && (
+              <>
+                <span className="font-bold text-text">{post.metadata.author}</span>
+                <span aria-hidden className="size-2 bg-accent" />
+              </>
+            )}
+            <time dateTime={post.metadata.date}>{published}</time>
+            <span aria-hidden className="size-2 bg-accent" />
+            <span>{readTime} min read</span>
+            {post.metadata.tags.map((tag) => (
+              <span key={tag} className="bg-tag-bg px-2 py-1 text-xs font-bold text-tag-text">
+                {tag}
+              </span>
+            ))}
           </div>
         </header>
 
         {post.metadata.coverImage && (
-          <div className="relative mb-20 h-[400px] w-full md:h-[500px]">
-            <div className="absolute inset-0 bg-accent translate-x-4 translate-y-4" />
-            <div className="relative w-full h-full border-2 border-border bg-surface">
+          <div className="relative mb-16 h-[240px] w-full sm:h-[400px] md:mb-20 md:h-[500px]">
+            <div className="absolute inset-0 translate-x-3 translate-y-3 bg-accent md:translate-x-4 md:translate-y-4" />
+            <div className="relative h-full w-full border-2 border-border bg-surface">
               <Image
                 src={post.metadata.coverImage}
                 alt={post.metadata.title}
@@ -92,14 +104,26 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           </div>
         )}
 
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
-          <div className="lg:col-span-8">
-            <div className="prose prose-lg prose-slate max-w-none prose-headings:text-text prose-p:text-text-secondary prose-a:text-accent prose-strong:text-text">
-              <MDXRemote
-                source={post.content}
-                components={MDXComponents}
-                options={{ mdxOptions: { rehypePlugins: [rehypeSlug] } }}
-              />
+        <div className="relative grid grid-cols-1 gap-x-16 lg:grid-cols-[minmax(0,38rem)_1fr]">
+          <div>
+            <MDXRemote
+              source={post.content}
+              components={MDXComponents}
+              options={{ mdxOptions: { rehypePlugins: [rehypeSlug] } }}
+            />
+
+            {/* End of the essay: the last tile, which also fills the reading tiles */}
+            <div
+              id={END_OF_POST_ID}
+              className="mt-16 flex items-center gap-4 border-t border-border pt-8"
+            >
+              <span aria-hidden className="size-4 bg-accent" />
+              <Link
+                href="/blog"
+                className="font-bold text-text underline decoration-accent decoration-[3px] underline-offset-4 transition-colors hover:bg-accent hover:text-on-accent"
+              >
+                All posts
+              </Link>
             </div>
           </div>
 

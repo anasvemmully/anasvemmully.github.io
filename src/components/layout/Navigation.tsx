@@ -17,7 +17,7 @@ const Navigation = () => {
   ];
 
   return (
-    <header className="w-full border-b-1">
+    <header className="w-full border-b border-border">
       <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
         <Link
           href="/"
