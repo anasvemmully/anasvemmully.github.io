@@ -39,7 +39,7 @@ export default function BlogContent({ allPosts }: { allPosts: PostMetadata[] }) 
   return (
     <div className="flex flex-col gap-10">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-        <h1 className="text-6xl md:text-8xl font-heading font-black tracking-tighter uppercase text-text">
+        <h1 className="text-5xl md:text-7xl font-heading font-black leading-none tracking-tighter uppercase text-text">
           BLOG
         </h1>
         
