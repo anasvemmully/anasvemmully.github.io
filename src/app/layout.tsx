@@ -75,7 +75,7 @@ export default function RootLayout({
       */}
       <body className="min-h-full flex flex-col bg-bg text-text selection:bg-accent/20">
         <SiteChrome>{children}</SiteChrome>
-        <Script 
+        <Script
           src="https://static.cloudflareinsights.com/beacon.min.js"
           data-cf-beacon='{"token": "3ae5aecda1a7433b99c3c04919dc0f84"}'
           strategy="afterInteractive"

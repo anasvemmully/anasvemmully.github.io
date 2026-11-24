@@ -11,8 +11,7 @@ export type Blob = { x: number; y: number; radius: number };
 const QUARTER = Math.PI / 2;
 
 /** Maps a sine into [0, 1]. */
-const wave = (t: number, freq: number, phase: number) =>
-  0.5 + 0.5 * Math.sin(t * freq + phase);
+const wave = (t: number, freq: number, phase: number) => 0.5 + 0.5 * Math.sin(t * freq + phase);
 
 /**
  * The four blobs at time `t` (seconds), for a canvas of the given size. Each

@@ -1,10 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import type {
-  HandLandmarker,
-  NormalizedLandmark,
-} from "@mediapipe/tasks-vision";
+import type { HandLandmarker, NormalizedLandmark } from "@mediapipe/tasks-vision";
 
 // Landmark index pairs forming the hand skeleton
 const CONNECTIONS: [number, number][] = [
@@ -34,8 +31,7 @@ const CONNECTIONS: [number, number][] = [
 // 0 = hand fully open, 1 = fist fully closed
 function handCloseness(lm: NormalizedLandmark[]): number {
   const wrist = lm[0];
-  const dist = (a: NormalizedLandmark, b: NormalizedLandmark) =>
-    Math.hypot(a.x - b.x, a.y - b.y);
+  const dist = (a: NormalizedLandmark, b: NormalizedLandmark) => Math.hypot(a.x - b.x, a.y - b.y);
   // [tip, mcp] per finger; curled fingers bring the tip close to the knuckle line
   const fingers: [number, number][] = [
     [8, 5],
@@ -125,8 +121,7 @@ export default function CameraWindow({
 
     (async () => {
       try {
-        const { FilesetResolver, HandLandmarker } =
-          await import("@mediapipe/tasks-vision");
+        const { FilesetResolver, HandLandmarker } = await import("@mediapipe/tasks-vision");
         const [vision, mediaStream] = await Promise.all([
           FilesetResolver.forVisionTasks(
             "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.21/wasm",
@@ -173,11 +168,9 @@ export default function CameraWindow({
 
             const handScore = result.handedness[0]?.[0]?.score ?? 0;
             const handLabel = result.handedness[0]?.[0]?.categoryName ?? "";
-            const handPresent =
-              result.landmarks.length > 0 && handScore >= MIN_HAND_SCORE;
+            const handPresent = result.landmarks.length > 0 && handScore >= MIN_HAND_SCORE;
             // Only the palm side may drive the paper — back of hand is ignored
-            const detected =
-              handPresent && palmFacingCamera(result.landmarks[0], handLabel);
+            const detected = handPresent && palmFacingCamera(result.landmarks[0], handLabel);
             const presence = presenceRef.current;
 
             if (detected) {
@@ -198,9 +191,7 @@ export default function CameraWindow({
               }
               const value = smoothRef.current;
 
-              ctx.strokeStyle = presence.active
-                ? "#FFFFFF"
-                : "rgba(255,255,255,0.35)";
+              ctx.strokeStyle = presence.active ? "#FFFFFF" : "rgba(255,255,255,0.35)";
               ctx.lineWidth = 3;
               for (const [a, b] of CONNECTIONS) {
                 ctx.beginPath();
@@ -208,18 +199,10 @@ export default function CameraWindow({
                 ctx.lineTo(lm[b].x * canvas.width, lm[b].y * canvas.height);
                 ctx.stroke();
               }
-              ctx.fillStyle = presence.active
-                ? "#FFD600"
-                : "rgba(255,214,0,0.35)";
+              ctx.fillStyle = presence.active ? "#FFD600" : "rgba(255,214,0,0.35)";
               for (const p of lm) {
                 ctx.beginPath();
-                ctx.arc(
-                  p.x * canvas.width,
-                  p.y * canvas.height,
-                  5,
-                  0,
-                  Math.PI * 2,
-                );
+                ctx.arc(p.x * canvas.width, p.y * canvas.height, 5, 0, Math.PI * 2);
                 ctx.fill();
               }
 
@@ -254,11 +237,7 @@ export default function CameraWindow({
                 // Canvas is CSS-mirrored, so flip text to keep it readable
                 ctx.save();
                 ctx.scale(-1, 1);
-                ctx.fillText(
-                  "show your palm ✋",
-                  -canvas.width / 2,
-                  canvas.height - 24,
-                );
+                ctx.fillText("show your palm ✋", -canvas.width / 2, canvas.height - 24);
                 ctx.restore();
               }
             }
@@ -354,10 +333,7 @@ export default function CameraWindow({
           playsInline
           className="absolute inset-0 w-full h-full object-cover -scale-x-100"
         />
-        <canvas
-          ref={canvasRef}
-          className="absolute inset-0 w-full h-full -scale-x-100"
-        />
+        <canvas ref={canvasRef} className="absolute inset-0 w-full h-full -scale-x-100" />
         {status !== "ready" && (
           <div className="absolute inset-0 flex items-center justify-center text-white font-mono text-xs text-center px-4">
             {status === "loading"

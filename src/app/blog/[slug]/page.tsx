@@ -42,10 +42,13 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     notFound();
   }
 
-  const headings = Array.from(post.content.matchAll(/^(#{2,3})\s+(.+)$/gm)).map(match => ({
+  const headings = Array.from(post.content.matchAll(/^(#{2,3})\s+(.+)$/gm)).map((match) => ({
     level: match[1].length,
     text: match[2].trim(),
-    slug: match[2].toLowerCase().replace(/[^\w\- ]+/g, '').replace(/\s+/g, '-'),
+    slug: match[2]
+      .toLowerCase()
+      .replace(/[^\w\- ]+/g, "")
+      .replace(/\s+/g, "-"),
   }));
 
   const wordCount = post.content.split(/\s+/).length;
@@ -55,18 +58,19 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     <BlogAnimationWrapper>
       <PageContainer as="article">
         <header className="flex flex-col items-center text-center gap-6 mb-12 max-w-4xl mx-auto">
-
           <h1 className="text-4xl md:text-6xl font-heading font-black tracking-tighter leading-[1.1] text-text">
             {post.metadata.title}
           </h1>
 
           <div className="flex items-center gap-4 text-sm text-text-secondary font-medium font-mono uppercase tracking-wider">
             <span>
-              {new Date(post.metadata.date).toLocaleDateString("en-US", {
-                month: "numeric",
-                day: "numeric",
-                year: "2-digit",
-              }).replace(/\//g, '.')}
+              {new Date(post.metadata.date)
+                .toLocaleDateString("en-US", {
+                  month: "numeric",
+                  day: "numeric",
+                  year: "2-digit",
+                })
+                .replace(/\//g, ".")}
             </span>
             <span className="w-1.5 h-1.5 rounded-full bg-accent" />
             <span>{readTime} MIN READ</span>
@@ -91,14 +95,14 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
           <div className="lg:col-span-8">
             <div className="prose prose-lg prose-slate max-w-none prose-headings:text-text prose-p:text-text-secondary prose-a:text-accent prose-strong:text-text">
-              <MDXRemote 
-                source={post.content} 
-                components={MDXComponents} 
-                options={{ mdxOptions: { rehypePlugins: [rehypeSlug] } }} 
+              <MDXRemote
+                source={post.content}
+                components={MDXComponents}
+                options={{ mdxOptions: { rehypePlugins: [rehypeSlug] } }}
               />
             </div>
           </div>
-          
+
           <TableOfContents headings={headings} />
         </div>
       </PageContainer>

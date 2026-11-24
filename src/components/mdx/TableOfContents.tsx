@@ -27,7 +27,7 @@ export default function TableOfContents({ headings }: TableOfContentsProps) {
       },
       {
         rootMargin: "-20% 0% -60% 0%", // Triggers when the heading is in the upper part of the screen
-      }
+      },
     );
 
     // Observe all heading elements

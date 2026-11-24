@@ -13,16 +13,7 @@ const SCRUB_PORTION = 0.8;
 // Crumble progress at which the paper starts crying out
 const PAIN_THRESHOLD = 0.45;
 
-const PAIN_WORDS = [
-  "Oww!",
-  "Please...",
-  "Stop!",
-  "Nooo!",
-  "Mercy!",
-  "Why?!",
-  "Ouch!",
-  "Help!",
-];
+const PAIN_WORDS = ["Oww!", "Please...", "Stop!", "Nooo!", "Mercy!", "Why?!", "Ouch!", "Help!"];
 
 const PainCloud = ({
   id,
@@ -116,10 +107,7 @@ export default function Home() {
           } else {
             // Hand drives the timeline: openness → start, closedness → crumbled
             if (!video.paused) video.pause();
-            const target =
-              Math.min(value / FIST_THRESHOLD, 1) *
-              video.duration *
-              SCRUB_PORTION;
+            const target = Math.min(value / FIST_THRESHOLD, 1) * video.duration * SCRUB_PORTION;
             // Ease toward the target so the paper doesn't jitter
             smoothTimeRef.current += (target - smoothTimeRef.current) * 0.5;
             if (Math.abs(video.currentTime - smoothTimeRef.current) > 0.015) {
@@ -213,13 +201,10 @@ export default function Home() {
                 </button>
               )}
               {cameraOn && <span aria-hidden>•</span>}
-              {cameraOn && (
-                <span>{camReady ? "Raise your hand now" : "Starting camera…"}</span>
-              )}
+              {cameraOn && <span>{camReady ? "Raise your hand now" : "Starting camera…"}</span>}
               {!cameraOn && camDenied && (
                 <span>
-                  Camera was blocked — allow camera access in your browser, then
-                  click again
+                  Camera was blocked — allow camera access in your browser, then click again
                 </span>
               )}
             </div>
@@ -241,12 +226,7 @@ export default function Home() {
             {/* Pain clouds fading up as the paper gets crushed */}
             <AnimatePresence mode="popLayout">
               {clouds.map((c) => (
-                <PainCloud
-                  key={c.id}
-                  id={c.id}
-                  word={c.word}
-                  onDone={removeCloud}
-                />
+                <PainCloud key={c.id} id={c.id} word={c.word} onDone={removeCloud} />
               ))}
             </AnimatePresence>
           </div>

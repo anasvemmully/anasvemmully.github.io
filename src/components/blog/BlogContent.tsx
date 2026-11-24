@@ -18,8 +18,9 @@ const PRESS =
 
 /** "29 Apr 2026". Fixed locale and time zone, so server and browser agree. */
 function formatDate(date: string) {
-  if (!date) return "";
-  return new Date(date).toLocaleDateString("en-GB", {
+  const parsed = new Date(date);
+  if (!date || Number.isNaN(parsed.getTime())) return "";
+  return parsed.toLocaleDateString("en-GB", {
     day: "numeric",
     month: "short",
     year: "numeric",
@@ -59,7 +60,7 @@ function Tags({ tags }: { tags: string[] }) {
 }
 
 /** The newest post, shown large at the top. */
-function FeaturedPost({ post }: { post: PostMetadata }) {
+function FeaturedPost({ post, latest }: { post: PostMetadata; latest: boolean }) {
   return (
     <Link
       href={`/blog/${post.slug}`}
@@ -79,9 +80,11 @@ function FeaturedPost({ post }: { post: PostMetadata }) {
       </div>
 
       <div className="flex flex-col gap-4 p-6 md:p-8">
-        <span className="w-fit border-2 border-text bg-accent px-2 py-0.5 font-mono text-xs font-bold uppercase tracking-widest">
-          Latest
-        </span>
+        {latest && (
+          <span className="w-fit border-2 border-text bg-accent px-2 py-0.5 font-mono text-xs font-bold uppercase tracking-widest">
+            Latest
+          </span>
+        )}
         <Meta post={post} />
         <h2 className="font-heading text-3xl font-black leading-tight tracking-tight md:text-4xl">
           {post.title}
@@ -226,7 +229,7 @@ export default function BlogContent({ allPosts }: { allPosts: PostMetadata[] }) 
 
       {posts.length > 0 ? (
         <>
-          {featured && <FeaturedPost post={featured} />}
+          {featured && <FeaturedPost post={featured} latest={!filtered} />}
 
           {rows.length > 0 && (
             <ul className="divide-y-2 divide-text border-y-2 border-text">

@@ -18,16 +18,18 @@ const Navigation = () => {
   return (
     <header className="w-full border-b-1">
       <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-        <Link 
-          href="/" 
+        <Link
+          href="/"
           className="text-2xl font-heading font-black tracking-tighter text-text flex items-center"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
-          <motion.span layout transition={{ type: "spring", stiffness: 400, damping: 30 }}>A</motion.span>
-          
-          <motion.span 
-            layout 
+          <motion.span layout transition={{ type: "spring", stiffness: 400, damping: 30 }}>
+            A
+          </motion.span>
+
+          <motion.span
+            layout
             animate={{ color: isHovered ? "var(--color-accent)" : "var(--color-text)" }}
             transition={{ type: "spring", stiffness: 400, damping: 30 }}
           >
@@ -48,8 +50,8 @@ const Navigation = () => {
             )}
           </AnimatePresence>
 
-          <motion.span 
-            layout 
+          <motion.span
+            layout
             animate={{ color: isHovered ? "var(--color-accent)" : "var(--color-text)" }}
             transition={{ type: "spring", stiffness: 400, damping: 30 }}
           >
@@ -70,15 +72,15 @@ const Navigation = () => {
             )}
           </AnimatePresence>
 
-          <motion.span layout transition={{ type: "spring", stiffness: 400, damping: 30 }}>S</motion.span>
+          <motion.span layout transition={{ type: "spring", stiffness: 400, damping: 30 }}>
+            S
+          </motion.span>
         </Link>
         <nav>
           <ul className="flex items-center gap-6">
             {navItems.map((item) => {
               const isActive =
-                item.href === "/"
-                  ? pathname === "/"
-                  : pathname.startsWith(item.href);
+                item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
 
               return (
                 <li key={item.href}>

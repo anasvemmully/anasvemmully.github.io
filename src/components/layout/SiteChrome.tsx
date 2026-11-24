@@ -9,7 +9,7 @@ import Footer from "./Footer";
 export default function SiteChrome({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   // The editor at /keystatic is a full-screen app of its own
-  if (pathname.startsWith("/keystatic")) return <>{children}</>;
+  if (pathname === "/keystatic" || pathname.startsWith("/keystatic/")) return <>{children}</>;
 
   return (
     <>

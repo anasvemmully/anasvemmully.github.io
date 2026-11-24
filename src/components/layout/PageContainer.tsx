@@ -17,8 +17,6 @@ export default function PageContainer({
   children: ReactNode;
 }) {
   return (
-    <Tag className={`mx-auto w-full max-w-6xl px-6 py-14 md:py-20 ${className}`}>
-      {children}
-    </Tag>
+    <Tag className={`mx-auto w-full max-w-6xl px-6 py-14 md:py-20 ${className}`}>{children}</Tag>
   );
 }

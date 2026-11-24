@@ -6,11 +6,28 @@ import { PostMetadata } from "@/types/post";
 
 const postsDirectory = path.join(process.cwd(), "content/posts");
 
+function isoDate(value: unknown) {
+  const date = value ? new Date(value as string | number | Date) : null;
+  return date && !Number.isNaN(date.getTime()) ? date.toISOString().split("T")[0] : "";
+}
+
 /** The start of a post as plain text, cut at a word boundary, for posts with no description. */
 function excerpt(content: string, maxLength = 160) {
-  const text = content.replace(/[#*`>_]/g, "").replace(/\s+/g, " ").trim();
+  const text = content
+    .replace(/^(```|~~~)[\s\S]*?^\1.*$/gm, " ")
+    .replace(/^\s*(import|export)\s.*$/gm, " ")
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
+    .replace(/<\/?[A-Za-z][^>]*>/g, " ")
+    .replace(/[#*`>~]/g, "")
+    .replace(/(?<!\w)_|_(?!\w)/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
   if (text.length <= maxLength) return text;
-  return text.slice(0, maxLength).replace(/\s+\S*$/, "").replace(/[.,;:!?—-]+$/, "") + "…";
+  let cut = text.slice(0, maxLength);
+  // Only drop the last word when it was actually cut in half.
+  if (/\S/.test(text[maxLength])) cut = cut.replace(/\s+\S*$/, "") || cut;
+  return cut.replace(/[\s.,;:!?—-]+$/, "") + "…";
 }
 
 export function getPostSlugs() {
@@ -21,9 +38,9 @@ export function getPostSlugs() {
 export function getPostBySlug(slug: string) {
   const realSlug = slug.replace(/\.mdx$/, "");
   const fullPath = path.join(postsDirectory, `${realSlug}.mdx`);
-  
+
   if (!fs.existsSync(fullPath)) return null;
-  
+
   const fileContents = fs.readFileSync(fullPath, "utf8");
   const { data, content } = matter(fileContents);
   const stats = readingTime(content);
@@ -31,7 +48,7 @@ export function getPostBySlug(slug: string) {
   const metadata: PostMetadata = {
     ...data,
     slug: realSlug,
-    date: data.date ? new Date(data.date).toISOString().split("T")[0] : "",
+    date: isoDate(data.date),
     tags: data.tags || (data.tag ? [data.tag] : []),
     time: data.time || Math.ceil(stats.minutes),
     description: data.description || excerpt(content),
