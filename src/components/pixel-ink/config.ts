@@ -16,8 +16,6 @@ export const ROUNDING = 6;
 export const EMPTY_ALPHA = 1;
 /** Squares at their deepest green. */
 export const INK_ALPHA = 0.9;
-/** Twinkling squares at the peak of their twinkle. */
-export const TWINKLE_ALPHA = 0.5;
 
 /* Shading: squares go from empty to deep green with the merging blobs */
 /** Field strength at which a blob's surface sits; green deepens above it. */
@@ -32,16 +30,19 @@ export const MAX_DEPTH = 0.5;
 /** How much each square's shade is randomly lighter or darker (fixed per square). */
 export const SHADE_JITTER = 0.06;
 
-/* Twinkle: random squares that fade up to a stronger green and back */
-/** Chance that a square lights up during any one of its twinkles. */
-export const TWINKLE_DENSITY = 0.025;
-/** Extra chance right at a blob's edge, where the merging happens. */
-export const TWINKLE_EDGE_BOOST = 0.06;
-/** How far from a blob's surface (in field units) the edge boost reaches. */
-export const TWINKLE_EDGE_REACH = 0.5;
-/** A square's twinkle lasts somewhere between these. */
-export const TWINKLE_MIN_SECONDS = 6;
-export const TWINKLE_MAX_SECONDS = 12;
+/* Random fill: squares fill up with green at random, hold, then drain away */
+/** Chance that a square fills during any one of its cycles. */
+export const FILL_DENSITY = 0.3;
+/** One square's fill cycle (fill, hold, drain) lasts somewhere between these. */
+export const FILL_MIN_SECONDS = 7;
+export const FILL_MAX_SECONDS = 16;
+/** Fraction of a cycle spent filling in. */
+export const FILL_IN = 0.1;
+/** Fraction of a cycle at which the square starts to drain; it is empty again by the end. */
+export const FILL_HOLD = 0.62;
+/** Each fill picks a green between these points on the ramp (0 = empty tile, 1 = deepest). */
+export const FILL_DEPTH_MIN = 0.25;
+export const FILL_DEPTH_MAX = 0.6;
 /**
  * The green ramp, empty tile first then GitHub's four levels. Used when the
  * `--ink-green-0…4` CSS variables aren't available.

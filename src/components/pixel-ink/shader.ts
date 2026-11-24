@@ -5,7 +5,7 @@ const f = (n: number) => (Number.isInteger(n) ? n.toFixed(1) : String(n));
 
 /**
  * The whole wall is drawn by one fragment shader over a full-screen triangle.
- * Every square's shade, twinkle, fades and intro are continuous functions of
+ * Every square's shade, random fill, fades and intro are continuous functions of
  * time, so nothing ever jumps between shades. The config values are baked in
  * as constants; only size, time, colours and blob positions change per frame.
  */
@@ -15,16 +15,17 @@ const GAP: f32 = ${f(c.GAP)};
 const ROUNDING: f32 = ${f(c.ROUNDING)};
 const EMPTY_ALPHA: f32 = ${f(c.EMPTY_ALPHA)};
 const INK_ALPHA: f32 = ${f(c.INK_ALPHA)};
-const TWINKLE_ALPHA: f32 = ${f(c.TWINKLE_ALPHA)};
 const FIELD_SURFACE: f32 = ${f(c.FIELD_SURFACE)};
 const FIELD_RANGE: f32 = ${f(c.FIELD_RANGE)};
 const MAX_DEPTH: f32 = ${f(c.MAX_DEPTH)};
 const SHADE_JITTER: f32 = ${f(c.SHADE_JITTER)};
-const TWINKLE_DENSITY: f32 = ${f(c.TWINKLE_DENSITY)};
-const TWINKLE_EDGE_BOOST: f32 = ${f(c.TWINKLE_EDGE_BOOST)};
-const TWINKLE_EDGE_REACH: f32 = ${f(c.TWINKLE_EDGE_REACH)};
-const TWINKLE_MIN: f32 = ${f(c.TWINKLE_MIN_SECONDS)};
-const TWINKLE_MAX: f32 = ${f(c.TWINKLE_MAX_SECONDS)};
+const FILL_DENSITY: f32 = ${f(c.FILL_DENSITY)};
+const FILL_MIN: f32 = ${f(c.FILL_MIN_SECONDS)};
+const FILL_MAX: f32 = ${f(c.FILL_MAX_SECONDS)};
+const FILL_IN: f32 = ${f(c.FILL_IN)};
+const FILL_HOLD: f32 = ${f(c.FILL_HOLD)};
+const FILL_DEPTH_MIN: f32 = ${f(c.FILL_DEPTH_MIN)};
+const FILL_DEPTH_MAX: f32 = ${f(c.FILL_DEPTH_MAX)};
 const EDGE_FADE_PX: f32 = ${f(c.EDGE_FADE_PX)};
 const WIDE_VIEWPORT_PX: f32 = ${f(c.WIDE_VIEWPORT_PX)};
 const HEADING_FADE_MIN: f32 = ${f(c.HEADING_FADE_MIN)};
@@ -103,29 +104,29 @@ fn fs(@builtin(position) fragCoord: vec4f) -> @location(0) vec4f {
   let intro = smoothstep(0.0, INTRO_FADE, u.time - f32(ci + cj) * INTRO_STAGGER);
   let visible = edge * behindHeading * intro;
 
-  // Shade: depth follows the blobs' field, with a fixed per-square variation
+  // Underlying shade: follows the blobs' field, with a fixed per-square variation.
+  // This is a position along the green ramp, from 0 (empty tile) up to MAX_DEPTH.
   let field = fieldAt(centre);
   let strength = smoothstep(0.0, 1.0, (field - FIELD_SURFACE) / FIELD_RANGE);
   let jitter = 1.0 - SHADE_JITTER + 2.0 * SHADE_JITTER * noise(ci, cj, 9);
-  let depth = clamp(strength * jitter, 0.0, 1.0);
-  let baseColour = rampAt(depth * MAX_DEPTH);
-  let baseAlpha = mix(EMPTY_ALPHA, INK_ALPHA, depth);
+  let blobDepth = clamp(strength * jitter, 0.0, 1.0) * MAX_DEPTH;
 
-  // Twinkle: each square runs its own cycle and rolls at the start of each
-  // one whether to brighten. The roll is softened so it can't pop.
-  let seconds = TWINKLE_MIN + noise(ci, cj, 1) * (TWINKLE_MAX - TWINKLE_MIN);
+  // Random fill: each square runs its own cycle (fill in, hold, drain away) and
+  // rolls at the start of each one whether it fills this time, and with which
+  // green. The roll is softened so it can't pop, and everything is a smooth
+  // ramp, so a square only ever fades between greens.
+  let seconds = FILL_MIN + noise(ci, cj, 1) * (FILL_MAX - FILL_MIN);
   let progress = u.time / seconds + noise(ci, cj, 2);
   let cycle = i32(floor(progress));
-  let nearSurface = 1.0 - clamp(abs(field - FIELD_SURFACE) / TWINKLE_EDGE_REACH, 0.0, 1.0);
-  let chance = TWINKLE_DENSITY + TWINKLE_EDGE_BOOST * nearSurface;
-  let lit = smoothstep(0.0, 0.03, chance - noise(ci, cj, 3 + cycle * 7));
-  let twinkleAlpha = sin(PI * fract(progress)) * lit * TWINKLE_ALPHA;
-  // Twinkles pick a light green (between levels 1 and 2)
-  let twinkleColour = rampAt(0.25 + 0.25 * noise(ci, cj, 4 + cycle * 7));
+  let phase = fract(progress);
+  let fills = smoothstep(0.0, 0.03, FILL_DENSITY - noise(ci, cj, 3 + cycle * 7));
+  let amount = smoothstep(0.0, FILL_IN, phase) * (1.0 - smoothstep(FILL_HOLD, 1.0, phase)) * fills;
+  let fillDepth = (FILL_DEPTH_MIN + (FILL_DEPTH_MAX - FILL_DEPTH_MIN) * noise(ci, cj, 4 + cycle * 7)) * amount;
 
-  // Twinkle over shade, blended (not switched), in premultiplied alpha
-  let alpha = twinkleAlpha + baseAlpha * (1.0 - twinkleAlpha);
-  let colour = (twinkleColour * twinkleAlpha + baseColour * baseAlpha * (1.0 - twinkleAlpha)) / max(alpha, 0.0001);
+  // Whichever is deeper wins, so a filling square never gets lighter than the blobs make it
+  let depth = max(blobDepth, fillDepth);
+  let colour = rampAt(depth);
+  let alpha = mix(EMPTY_ALPHA, INK_ALPHA, clamp(depth / MAX_DEPTH, 0.0, 1.0));
   let coverage = shape * visible;
   return vec4f(colour * alpha * coverage, alpha * coverage);
 }
