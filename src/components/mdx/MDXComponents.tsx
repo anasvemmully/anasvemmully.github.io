@@ -8,7 +8,7 @@ import ImageGallery from "./ImageGallery";
 
 const MDXComponents = {
   img: (props: React.HTMLProps<HTMLImageElement>) => (
-    <div className="my-8 overflow-hidden border-4 border-text shadow-[6px_6px_0_var(--color-shadow)]">
+    <div className="my-8 overflow-hidden border-4 border-border shadow-[6px_6px_0_var(--color-shadow)]">
       {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
       {/* @ts-ignore */}
       <Image
@@ -54,24 +54,30 @@ const MDXComponents = {
     <h3 {...props} className="text-2xl font-bold mt-8 mb-4 tracking-tight text-text" />
   ),
   p: (props: React.HTMLProps<HTMLParagraphElement>) => (
-    <p {...props} className="leading-relaxed mb-6 text-text" />
+    <p {...props} className="mb-6 text-lg leading-8 text-text" />
   ),
   ul: (props: React.HTMLProps<HTMLUListElement>) => (
-    <ul {...props} className="list-square pl-6 mb-6 space-y-2 text-text" />
+    <ul
+      {...props}
+      className="mb-6 list-[square] space-y-2 pl-6 text-lg leading-8 text-text marker:text-accent"
+    />
   ),
   ol: (props: React.OlHTMLAttributes<HTMLOListElement>) => (
-    <ol {...props} className="list-decimal pl-6 mb-6 space-y-2 font-mono text-text" />
+    <ol
+      {...props}
+      className="mb-6 list-decimal space-y-2 pl-6 font-mono text-lg leading-8 text-text marker:text-accent"
+    />
   ),
-  li: (props: React.HTMLProps<HTMLLIElement>) => <li {...props} className="leading-relaxed" />,
+  li: (props: React.HTMLProps<HTMLLIElement>) => <li {...props} className="pl-1" />,
   blockquote: (props: React.HTMLProps<HTMLQuoteElement>) => (
     <blockquote
       {...props}
       className="border-l-8 border-accent bg-surface px-6 py-4 my-8 italic text-lg text-text font-serif shadow-[4px_4px_0_var(--color-shadow)]"
     />
   ),
-  hr: () => <hr className="my-12 border-t-4 border-dashed border-text" />,
+  hr: () => <hr className="my-12 border-t-4 border-dashed border-border" />,
   pre: (props: React.HTMLProps<HTMLPreElement>) => (
-    <div className="my-8 overflow-hidden border-4 border-text shadow-[6px_6px_0_var(--color-shadow)] bg-code-bg">
+    <div className="my-8 overflow-hidden border-4 border-border shadow-[6px_6px_0_var(--color-shadow)] bg-code-bg">
       <pre {...props} className="p-6 overflow-x-auto text-sm font-mono text-white" />
     </div>
   ),

@@ -78,9 +78,9 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         </header>
 
         {post.metadata.coverImage && (
-          <div className="relative w-full h-[400px] md:h-[500px] overflow-hidden mb-20">
+          <div className="relative mb-20 h-[400px] w-full md:h-[500px]">
             <div className="absolute inset-0 bg-accent translate-x-4 translate-y-4" />
-            <div className="relative w-full h-full border-2 border-text bg-surface">
+            <div className="relative w-full h-full border-2 border-border bg-surface">
               <Image
                 src={post.metadata.coverImage}
                 alt={post.metadata.title}

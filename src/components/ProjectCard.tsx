@@ -21,13 +21,13 @@ export default function ProjectCard({ project }: { project: Project }) {
   const { title, description, url, logo, panel, titleFont } = project;
 
   return (
-    <li className="group flex flex-col border-4 border-text bg-surface shadow-[8px_8px_0_var(--color-shadow)] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[4px_4px_0_var(--color-shadow)]">
+    <li className="group flex flex-col border-4 border-border bg-surface shadow-[8px_8px_0_var(--color-shadow)] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[4px_4px_0_var(--color-shadow)]">
       <Link
         href={url}
         target="_blank"
         rel="noopener noreferrer"
         aria-label={`Open ${title} in a new tab`}
-        className="flex h-40 items-center justify-center border-b-4 border-text p-6"
+        className="flex h-40 items-center justify-center border-b-4 border-border p-6"
         style={{ backgroundColor: panel }}
       >
         <Image
