@@ -20,18 +20,24 @@ In production the editor saves by committing to GitHub, and Vercel deploys that
 commit. Until this setup is done, `/keystatic` returns a 404 on the live site,
 so nothing is exposed and the site always builds.
 
-1. **Create the GitHub App.** Locally, run
-   `NEXT_PUBLIC_KEYSTATIC_STORAGE=github npm run dev`, open
-   <http://localhost:3000/keystatic>, and follow the prompt to create a GitHub
-   App. It writes these to your local `.env` file:
-   - `KEYSTATIC_GITHUB_CLIENT_ID`
-   - `KEYSTATIC_GITHUB_CLIENT_SECRET`
-   - `KEYSTATIC_SECRET`
-   - `NEXT_PUBLIC_KEYSTATIC_GITHUB_APP_SLUG`
-2. **Install the app on this repo** when GitHub offers (anasvemmully/anasvemmully.github.io).
-3. **Add the production callback URL** in the GitHub App's settings (GitHub →
-   Settings → Developer settings → GitHub Apps → your app):
-   `https://anas.vemmully.in/api/keystatic/github/oauth/callback`
+1. **Create the GitHub App.** Run `NEXT_PUBLIC_KEYSTATIC_STORAGE=github npm run dev`
+   and open <http://localhost:3000/keystatic>. It sends you to
+   `http://127.0.0.1:3000/keystatic` (GitHub sign-in needs that address; this is
+   expected). Click **Log in with GitHub**, which leads to the Keystatic Setup
+   screen:
+   - **Deployed App URL:** `https://anas.vemmully.in`
+   - **GitHub organization:** leave blank (the app goes in your personal account)
+   - Click **Create GitHub App**, confirm on GitHub, and you are sent back. Keystatic
+     writes these secrets to a `.env` file in the project (it is git-ignored, never
+     commit it):
+     - `KEYSTATIC_GITHUB_CLIENT_ID`
+     - `KEYSTATIC_GITHUB_CLIENT_SECRET`
+     - `KEYSTATIC_SECRET`
+     - `NEXT_PUBLIC_KEYSTATIC_GITHUB_APP_SLUG`
+2. **Install the app on this repo** when GitHub offers (`anasvemmully/anasvemmully.github.io`).
+3. **Check the callback URL** in the app's settings (GitHub → Settings → Developer
+   settings → GitHub Apps → your app). It should include
+   `https://anas.vemmully.in/api/keystatic/github/oauth/callback`. Add it if it is missing.
 4. **Add the four variables to Vercel** (Project → Settings → Environment
    Variables, for Production and Preview), then redeploy.
 5. Visit <https://anas.vemmully.in/keystatic> and sign in with GitHub. Only
