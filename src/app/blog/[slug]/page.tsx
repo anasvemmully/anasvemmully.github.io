@@ -6,6 +6,7 @@ import Image from "next/image";
 import rehypeSlug from "rehype-slug";
 import TableOfContents from "@/components/mdx/TableOfContents";
 import BlogAnimationWrapper from "@/components/blog/BlogAnimationWrapper";
+import PageContainer from "@/components/layout/PageContainer";
 
 export async function generateStaticParams() {
   const slugs = getPostSlugs();
@@ -52,7 +53,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
   return (
     <BlogAnimationWrapper>
-      <article className="max-w-6xl mx-auto px-6 py-20">
+      <PageContainer as="article">
         <header className="flex flex-col items-center text-center gap-6 mb-12 max-w-4xl mx-auto">
 
           <h1 className="text-4xl md:text-6xl font-heading font-black tracking-tighter leading-[1.1] text-text">
@@ -100,7 +101,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           
           <TableOfContents headings={headings} />
         </div>
-      </article>
+      </PageContainer>
     </BlogAnimationWrapper>
   );
 }
