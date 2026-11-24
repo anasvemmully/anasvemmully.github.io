@@ -5,9 +5,16 @@ import MDXComponents from "@/components/mdx/MDXComponents";
 import Image from "next/image";
 import rehypeSlug from "rehype-slug";
 import Link from "next/link";
-import TableOfContents, { END_OF_POST_ID } from "@/components/mdx/TableOfContents";
+import { Source_Serif_4 } from "next/font/google";
 import BlogAnimationWrapper from "@/components/blog/BlogAnimationWrapper";
 import PageContainer from "@/components/layout/PageContainer";
+
+/** The reading face for the essay body: a text serif, like Medium's. Loaded only on post pages. */
+const readingSerif = Source_Serif_4({
+  subsets: ["latin"],
+  style: ["normal", "italic"],
+  display: "swap",
+});
 
 export async function generateStaticParams() {
   const slugs = getPostSlugs();
@@ -42,15 +49,6 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   if (!post) {
     notFound();
   }
-
-  const headings = Array.from(post.content.matchAll(/^(#{2,3})\s+(.+)$/gm)).map((match) => ({
-    level: match[1].length,
-    text: match[2].trim(),
-    slug: match[2]
-      .toLowerCase()
-      .replace(/[^\w\- ]+/g, "")
-      .replace(/\s+/g, "-"),
-  }));
 
   const wordCount = post.content.split(/\s+/).length;
   const readTime = Math.ceil(wordCount / 200);
@@ -104,30 +102,22 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           </div>
         )}
 
-        <div className="relative grid grid-cols-1 gap-x-16 lg:grid-cols-[minmax(0,38rem)_1fr]">
-          <div>
-            <MDXRemote
-              source={post.content}
-              components={MDXComponents}
-              options={{ mdxOptions: { rehypePlugins: [rehypeSlug] } }}
-            />
+        {/* The essay: a single centred column in a reading serif, like Medium */}
+        <div className={`${readingSerif.className} mx-auto max-w-[42.5rem]`}>
+          <MDXRemote
+            source={post.content}
+            components={MDXComponents}
+            options={{ mdxOptions: { rehypePlugins: [rehypeSlug] } }}
+          />
 
-            {/* End of the essay: the last tile, which also fills the reading tiles */}
-            <div
-              id={END_OF_POST_ID}
-              className="mt-16 flex items-center gap-4 border-t border-border pt-8"
+          <div className="mt-16 border-t border-border pt-8 font-heading">
+            <Link
+              href="/blog"
+              className="font-bold text-text underline underline-offset-4 transition-colors hover:text-text-secondary"
             >
-              <span aria-hidden className="size-4 bg-accent" />
-              <Link
-                href="/blog"
-                className="font-bold text-text underline decoration-accent decoration-[3px] underline-offset-4 transition-colors hover:bg-accent hover:text-on-accent"
-              >
-                All posts
-              </Link>
-            </div>
+              All posts
+            </Link>
           </div>
-
-          <TableOfContents headings={headings} />
         </div>
       </PageContainer>
     </BlogAnimationWrapper>

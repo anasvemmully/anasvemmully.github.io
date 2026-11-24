@@ -199,7 +199,7 @@ export default function CameraWindow({
                 ctx.lineTo(lm[b].x * canvas.width, lm[b].y * canvas.height);
                 ctx.stroke();
               }
-              ctx.fillStyle = presence.active ? "#FFD600" : "rgba(255,214,0,0.35)";
+              ctx.fillStyle = presence.active ? "#E6CC8F" : "rgba(230,204,143,0.35)";
               for (const p of lm) {
                 ctx.beginPath();
                 ctx.arc(p.x * canvas.width, p.y * canvas.height, 5, 0, Math.PI * 2);
@@ -209,7 +209,7 @@ export default function CameraWindow({
               // Crumble progress bar along the bottom
               ctx.fillStyle = "rgba(15,15,15,0.6)";
               ctx.fillRect(0, canvas.height - 10, canvas.width, 10);
-              ctx.fillStyle = "#FFD600";
+              ctx.fillStyle = "#E6CC8F";
               ctx.fillRect(0, canvas.height - 10, canvas.width * value, 10);
             } else {
               presence.seen = 0;

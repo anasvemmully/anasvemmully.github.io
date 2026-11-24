@@ -6,8 +6,8 @@ import { useTheme } from "@/lib/theme";
 import { createRenderer } from "./pixel-ink/renderer";
 
 /**
- * A contribution-graph wall drawn on the GPU with WebGPU, all in GitHub's
- * greens: pale empty squares everywhere, deepening where four blobs wander,
+ * A contribution-graph wall drawn on the GPU with WebGPU, in a soft
+ * sage: pale empty squares everywhere, deepening where four blobs wander,
  * merge like water drops and split apart again, with random squares twinkling
  * to a stronger green. Every change is a smooth fade. Squares sweep in on
  * load, and the wall fades toward its edges and behind the heading.

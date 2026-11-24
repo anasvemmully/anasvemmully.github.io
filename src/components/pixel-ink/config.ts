@@ -24,7 +24,7 @@ export const FIELD_SURFACE = 0.6;
 export const FIELD_RANGE = 0.9;
 /**
  * How far along the green ramp the blobs can reach, from 0 (empty tile) to 1
- * (deepest green). 0.5 stops at GitHub's level 2, keeping the greens light.
+ * (deepest green). 0.5 stops at the ramp's middle level, keeping the sage light.
  */
 export const MAX_DEPTH = 0.5;
 /** How much each square's shade is randomly lighter or darker (fixed per square). */
@@ -44,10 +44,10 @@ export const FILL_HOLD = 0.62;
 export const FILL_DEPTH_MIN = 0.25;
 export const FILL_DEPTH_MAX = 0.6;
 /**
- * The green ramp, empty tile first then GitHub's four levels. Used when the
+ * The sage ramp, empty tile first then four levels like GitHub's. Used when the
  * `--ink-green-0…4` CSS variables aren't available.
  */
-export const GREEN_RAMP_FALLBACK = ["#e6f6ea", "#9be9a8", "#40c463", "#30a14e", "#216e39"];
+export const GREEN_RAMP_FALLBACK = ["#edf1e9", "#d3dfca", "#b0c7a5", "#8eac83", "#678864"];
 
 /* Blobs: the circles that wander, merge and split */
 /** Seconds the whole loop takes to turn by one quarter. */
