@@ -4,7 +4,6 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import MDXComponents from "@/components/mdx/MDXComponents";
 import Image from "next/image";
 import rehypeSlug from "rehype-slug";
-import Link from "next/link";
 import { Source_Serif_4 } from "next/font/google";
 import BlogAnimationWrapper from "@/components/blog/BlogAnimationWrapper";
 import PageContainer from "@/components/layout/PageContainer";
@@ -68,22 +67,23 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             {post.metadata.title}
           </h1>
 
-          {/* The yellow tile, the site's own mark, divides the facts */}
-          <div className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-3 text-base text-text-secondary">
-            {post.metadata.author && (
-              <>
-                <span className="font-bold text-text">{post.metadata.author}</span>
-                <span aria-hidden className="size-2 bg-accent" />
-              </>
-            )}
-            <time dateTime={post.metadata.date}>{published}</time>
-            <span aria-hidden className="size-2 bg-accent" />
-            <span>{readTime} min read</span>
-            {post.metadata.tags.map((tag) => (
-              <span key={tag} className="bg-tag-bg px-2 py-1 text-xs font-bold text-tag-text">
-                {tag}
-              </span>
-            ))}
+          {/* Byline, Medium-style: avatar and name, then a quiet line of facts */}
+          <div className="mt-8 flex items-center gap-3">
+            <Image
+              src="/images/avatar.png"
+              alt=""
+              width={44}
+              height={44}
+              className="size-11 rounded-full"
+            />
+            <div className="leading-snug">
+              {post.metadata.author && (
+                <p className="font-medium text-text">{post.metadata.author}</p>
+              )}
+              <p className="text-sm text-text-secondary">
+                {readTime} min read · <time dateTime={post.metadata.date}>{published}</time>
+              </p>
+            </div>
           </div>
         </header>
 
@@ -109,15 +109,6 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             components={MDXComponents}
             options={{ mdxOptions: { rehypePlugins: [rehypeSlug] } }}
           />
-
-          <div className="mt-16 border-t border-border pt-8 font-heading">
-            <Link
-              href="/blog"
-              className="font-bold text-text underline underline-offset-4 transition-colors hover:text-text-secondary"
-            >
-              All posts
-            </Link>
-          </div>
         </div>
       </PageContainer>
     </BlogAnimationWrapper>
