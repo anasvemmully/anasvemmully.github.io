@@ -1,5 +1,15 @@
 @import "tailwindcss";
 
+/* Contribution-graph greens for the home background (read by PixelInk):
+   0 is an empty tile, 1–4 are GitHub's light-theme contribution levels */
+:root {
+  --ink-green-0: #e6f6ea;
+  --ink-green-1: #9be9a8;
+  --ink-green-2: #40c463;
+  --ink-green-3: #30a14e;
+  --ink-green-4: #216e39;
+}
+
 @theme {
   --color-primary-yellow: #FFD600;
   --color-primary-black: #0F0F0F;

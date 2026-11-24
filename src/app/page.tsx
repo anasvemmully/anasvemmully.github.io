@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import PixelInk from "@/components/PixelInk";
 import CameraWindow, { type CameraStatus } from "@/components/CameraWindow";
 
 // Above this closeness the fist is considered "fully closed" and the
@@ -185,8 +186,10 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="flex flex-1 flex-col">
-      <section className="flex flex-1 items-center">
+    <div className="relative flex flex-1 flex-col overflow-hidden">
+      {/* Faint contribution-wall of ink and green squares behind everything */}
+      <PixelInk />
+      <section className="relative flex flex-1 items-center">
         <div className="mx-auto grid min-h-[70vh] w-full max-w-6xl items-center gap-10 px-6 py-12 md:grid-cols-2 md:gap-8 animate-in fade-in slide-in-from-bottom-8 duration-700">
           <div className="order-2 md:order-1">
             <h1 className="text-center text-5xl font-heading font-black leading-[1.05] tracking-tighter text-text md:text-left md:text-6xl lg:text-[5.5rem]">
