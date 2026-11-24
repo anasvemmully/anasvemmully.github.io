@@ -1,11 +1,16 @@
 "use client";
 
 import Script from "next/script";
+import { usePathname } from "next/navigation";
 import Navigation from "./Navigation";
 import Footer from "./Footer";
 
-/** Site header, footer and analytics around every page. */
+/** Site header, footer and analytics around every page, except the blog editor. */
 export default function SiteChrome({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  // The editor at /keystatic is a full-screen app of its own
+  if (pathname.startsWith("/keystatic")) return <>{children}</>;
+
   return (
     <>
       <div className="min-h-dvh flex flex-col">

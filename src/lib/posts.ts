@@ -6,6 +6,13 @@ import { PostMetadata } from "@/types/post";
 
 const postsDirectory = path.join(process.cwd(), "content/posts");
 
+/** The start of a post as plain text, cut at a word boundary, for posts with no description. */
+function excerpt(content: string, maxLength = 160) {
+  const text = content.replace(/[#*`>_]/g, "").replace(/\s+/g, " ").trim();
+  if (text.length <= maxLength) return text;
+  return text.slice(0, maxLength).replace(/\s+\S*$/, "").replace(/[.,;:!?—-]+$/, "") + "…";
+}
+
 export function getPostSlugs() {
   if (!fs.existsSync(postsDirectory)) return [];
   return fs.readdirSync(postsDirectory).filter((file) => file.endsWith(".mdx"));
@@ -27,7 +34,7 @@ export function getPostBySlug(slug: string) {
     date: data.date ? new Date(data.date).toISOString().split("T")[0] : "",
     tags: data.tags || (data.tag ? [data.tag] : []),
     time: data.time || Math.ceil(stats.minutes),
-    description: data.description || content.slice(0, 160).replace(/[#*`]/g, "") + "...",
+    description: data.description || excerpt(content),
   } as PostMetadata;
 
   return { metadata, content };
