@@ -4,8 +4,8 @@ import { Moon, Sun } from "lucide-react";
 import { useTheme } from "@/lib/theme";
 
 /**
- * Light/dark switch for the header: a pill with a yellow thumb that slides
- * between sun (light) and moon (dark). The new theme grows out of the thumb.
+ * Light/dark switch for the header: just an icon (a sun in dark mode, a moon in
+ * light mode, showing where a click takes you). The new theme grows out of it.
  */
 export default function ThemeToggle() {
   const { theme, toggle } = useTheme();
@@ -14,21 +14,17 @@ export default function ThemeToggle() {
   return (
     <button
       type="button"
-      role="switch"
-      aria-checked={theme === "dark"}
-      aria-label="Dark theme"
-      title={`Switch to ${next} theme`}
       onClick={(e) => {
         const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
         toggle({ x: left + width / 2, y: top + height / 2 });
       }}
-      className="inline-flex h-8 w-15 shrink-0 items-center rounded-full border-2 border-border bg-surface p-0.5 transition-colors hover:border-text focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-text"
+      aria-label={`Switch to ${next} theme`}
+      title={`Switch to ${next} theme`}
+      className="inline-flex size-9 shrink-0 items-center justify-center text-text-secondary transition-colors hover:text-text focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-text"
     >
-      {/* Position and icon follow CSS (`dark:`), not `theme`, so they are right on first paint */}
-      <span className="flex size-6 items-center justify-center rounded-full bg-accent text-on-accent transition-transform duration-200 ease-out motion-reduce:transition-none dark:translate-x-7">
-        <Sun size={14} aria-hidden className="dark:hidden" />
-        <Moon size={14} aria-hidden className="hidden dark:block" />
-      </span>
+      {/* Swapped with CSS, not with `theme`, so the right icon is there on first paint */}
+      <Moon size={18} aria-hidden className="dark:hidden" />
+      <Sun size={18} aria-hidden className="hidden dark:block" />
     </button>
   );
 }
